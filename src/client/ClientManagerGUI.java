@@ -11,6 +11,7 @@ import javax.swing.JButton;
 public class ClientManagerGUI {
 
 	private JFrame frame;
+	private Client client;
 
 	/**
 	 * Launch the application.
@@ -29,24 +30,28 @@ public class ClientManagerGUI {
 //	}
 	
 	
-	public void loadGUI() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClientManagerGUI window = new ClientManagerGUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public void loadGUI(Client client) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ClientManagerGUI window = new ClientManagerGUI(client);
+//					window.frame.setVisible(true);
+////					this.client = client;
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
-	public ClientManagerGUI() {
+	public ClientManagerGUI(Client client) {
+		this.client = client;
 		initialize();
+		frame.setVisible(true);
+
 	}
 
 	/**

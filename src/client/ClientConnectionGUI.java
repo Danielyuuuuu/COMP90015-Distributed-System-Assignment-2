@@ -124,18 +124,23 @@ public class ClientConnectionGUI {
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
 					String userName = textField_username.getText().strip();
 					
-					//Connect to the rmiregistry that is running on localhost
-					Registry registry = LocateRegistry.getRegistry("localhost", 3333);
-		           
-					//Retrieve the stub/proxy for the remote math object from the registry
-					IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+					Client client = new Client();
+					if (client.initializeRMIConnection(hostName, portNumber, userName)) {
+						clientManagerGUI = new ClientManagerGUI(client);
+//						clientManagerGUI.loadGUI(client);
+						frame.dispose();
+					}
+					else {
+						errorMessage.setText("Could not connect, please try again");
+						errorMessage.setVisible(true);
+						textField_hostname.setText("");
+						textField_portnumber.setText("");
+						textField_username.setText("");
+					}
 					
-					System.out.println("Client: calling remote methods");
-					remoteWhiteBoard.printHello();
-					
-					clientManagerGUI = new ClientManagerGUI();
-					clientManagerGUI.loadGUI();
-					frame.dispose();
+//					clientManagerGUI = new ClientManagerGUI();
+//					clientManagerGUI.loadGUI();
+//					frame.dispose();
 					
 				}
 				catch(Exception e1) {
