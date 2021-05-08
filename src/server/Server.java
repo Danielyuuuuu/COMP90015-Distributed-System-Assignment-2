@@ -43,10 +43,15 @@ public class Server {
 			System.exit(1);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+//			System.out.println("You did not enter a valid port number, server terminated!");
+			System.out.println(e.toString());
+			System.exit(1);
 		} catch (AlreadyBoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println(e.toString());
+			System.exit(1);
 		}
 	}
 	
