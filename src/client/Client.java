@@ -10,20 +10,25 @@ import remote.IRemoteWhiteBoard;
 
 public class Client {
 
+	private String hostName;
+	private int portNumber;
 	private String userName;
 	private Registry registry = null;
 	private IRemoteWhiteBoard remoteWhiteBoard = null;
 	
-	public Client() {}
+	public Client(String hostName, int portNumber, String userName) {
+		this.hostName = hostName;
+		this.portNumber = portNumber;
+		this.userName = userName;
+	}
 	
-	public Boolean initializeRMIConnection(String hostName, int portNumber, String userName) {
+	public Boolean initializeRMIConnection() {
 		//Connect to the rmiregistry that is running on localhost
 		try {
 			registry = LocateRegistry.getRegistry("localhost", portNumber);
 			remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
 			System.out.println("Client: calling remote methods");
 			remoteWhiteBoard.printHello();
-			this.userName = userName;
 			return true;
 		} catch (RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block

@@ -124,8 +124,8 @@ public class ClientConnectionGUI {
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
 					String userName = textField_username.getText().strip();
 					
-					Client client = new Client();
-					if (client.initializeRMIConnection(hostName, portNumber, userName)) {
+					Client client = new Client(hostName, portNumber, userName);
+					if (client.initializeRMIConnection()) {
 						clientManagerGUI = new ClientManagerGUI(client);
 //						clientManagerGUI.loadGUI(client);
 						frame.dispose();
