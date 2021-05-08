@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
 public class ClientManagerGUI {
 
@@ -58,10 +59,15 @@ public class ClientManagerGUI {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lbl_heading = new JLabel("White Board Manager");
+		lbl_heading.setBounds(147, 6, 203, 25);
 		lbl_heading.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_heading.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		lbl_heading.setBounds(147, 6, 203, 25);
 		frame.getContentPane().add(lbl_heading);
+		
+		JButton btn_newWhiteBoard = new JButton("New White Board");
+		btn_newWhiteBoard.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		btn_newWhiteBoard.setBounds(6, 79, 212, 29);
+		frame.getContentPane().add(btn_newWhiteBoard);
 	}
 
 }
