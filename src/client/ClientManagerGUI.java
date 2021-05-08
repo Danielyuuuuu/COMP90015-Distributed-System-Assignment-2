@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
-public class ClientConnectedGUI {
+public class ClientManagerGUI {
 
 	private JFrame frame;
 
@@ -32,7 +32,7 @@ public class ClientConnectedGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientConnectedGUI window = new ClientConnectedGUI();
+					ClientManagerGUI window = new ClientManagerGUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +44,7 @@ public class ClientConnectedGUI {
 	/**
 	 * Create the application.
 	 */
-	public ClientConnectedGUI() {
+	public ClientManagerGUI() {
 		initialize();
 	}
 
@@ -57,7 +57,7 @@ public class ClientConnectedGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lbl_heading = new JLabel("White Board Client");
+		JLabel lbl_heading = new JLabel("White Board Manager");
 		lbl_heading.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_heading.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		lbl_heading.setBounds(147, 6, 203, 25);

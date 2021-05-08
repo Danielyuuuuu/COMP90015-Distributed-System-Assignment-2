@@ -27,7 +27,7 @@ public class ClientConnectionGUI {
 	private JTextField textField_hostname;
 	private JTextField textField_portnumber;
 	private JTextField textField_username;
-	private ClientConnectedGUI clientConnectedGUI;
+	private ClientManagerGUI clientManagerGUI;
 
 	/**
 	 * Launch the application.
@@ -133,8 +133,8 @@ public class ClientConnectionGUI {
 					System.out.println("Client: calling remote methods");
 					remoteWhiteBoard.printHello();
 					
-					clientConnectedGUI = new ClientConnectedGUI();
-					clientConnectedGUI.loadGUI();
+					clientManagerGUI = new ClientManagerGUI();
+					clientManagerGUI.loadGUI();
 					frame.dispose();
 					
 				}
