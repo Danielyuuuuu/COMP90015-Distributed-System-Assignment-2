@@ -8,8 +8,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 import javax.swing.SwingConstants;
+
+import remote.IRemoteWhiteBoard;
 
 //import org.json.simple.parser.ParseException;
 
@@ -23,6 +27,7 @@ public class ClientConnectionGUI {
 	private JTextField textField_hostname;
 	private JTextField textField_portnumber;
 	private JTextField textField_username;
+	private ClientConnectedGUI clientConnectedGUI;
 
 	/**
 	 * Launch the application.
@@ -118,6 +123,20 @@ public class ClientConnectionGUI {
 					String hostName = textField_hostname.getText().strip();
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
 					String userName = textField_username.getText().strip();
+					
+					//Connect to the rmiregistry that is running on localhost
+					Registry registry = LocateRegistry.getRegistry("localhost", 3333);
+		           
+					//Retrieve the stub/proxy for the remote math object from the registry
+					IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+					
+					System.out.println("Client: calling remote methods");
+					remoteWhiteBoard.printHello();
+					
+					clientConnectedGUI = new ClientConnectedGUI();
+					clientConnectedGUI.loadGUI();
+					frame.dispose();
+					
 				}
 				catch(Exception e1) {
 					errorMessage.setText("Could not connect, please try again");
