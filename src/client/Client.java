@@ -16,27 +16,30 @@ public class Client {
 	private Registry registry = null;
 	private IRemoteWhiteBoard remoteWhiteBoard = null;
 	
-	public Client(String hostName, int portNumber, String userName) {
+	public Client(String hostName, int portNumber, String userName, Registry registry, IRemoteWhiteBoard remoteWhiteBoard) throws RemoteException {
 		this.hostName = hostName;
 		this.portNumber = portNumber;
 		this.userName = userName;
+		this.registry = registry;
+		this.remoteWhiteBoard = remoteWhiteBoard;
+		
+		System.out.println("Client: calling remote methods");
+		remoteWhiteBoard.printHello();
+
 	}
 	
-	public Boolean initializeRMIConnection() {
-		//Connect to the rmiregistry that is running on localhost
-		try {
-			registry = LocateRegistry.getRegistry("localhost", portNumber);
-			remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
-			System.out.println("Client: calling remote methods");
-			remoteWhiteBoard.printHello();
-			return true;
-		} catch (RemoteException | NotBoundException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			return false;
-		}
-		
-
-
-	}
+//	public Boolean initializeRMIConnection() {
+//		//Connect to the rmiregistry that is running on localhost
+//		try {
+//			registry = LocateRegistry.getRegistry("localhost", portNumber);
+//			remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+//			System.out.println("Client: calling remote methods");
+//			remoteWhiteBoard.printHello();
+//			return true;
+//		} catch (RemoteException | NotBoundException e) {
+//			// TODO Auto-generated catch block
+////			e.printStackTrace();
+//			return false;
+//		}
+//	}
 }

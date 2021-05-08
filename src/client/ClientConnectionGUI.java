@@ -124,23 +124,31 @@ public class ClientConnectionGUI {
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
 					String userName = textField_username.getText().strip();
 					
-					Client client = new Client(hostName, portNumber, userName);
-					if (client.initializeRMIConnection()) {
-						clientManagerGUI = new ClientManagerGUI(client);
-//						clientManagerGUI.loadGUI(client);
-						frame.dispose();
-					}
-					else {
-						errorMessage.setText("Could not connect, please try again");
-						errorMessage.setVisible(true);
-						textField_hostname.setText("");
-						textField_portnumber.setText("");
-						textField_username.setText("");
-					}
 					
-//					clientManagerGUI = new ClientManagerGUI();
-//					clientManagerGUI.loadGUI();
-//					frame.dispose();
+					Registry registry = LocateRegistry.getRegistry("localhost", portNumber);
+					IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+					
+					// Check if the user name already exist
+					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					
+					
+					Client client = new Client(hostName, portNumber, userName, registry, remoteWhiteBoard);
+					
+//					if (client.initializeRMIConnection()) {
+//						clientManagerGUI = new ClientManagerGUI(client);
+////						clientManagerGUI.loadGUI(client);
+//						frame.dispose();
+//					}
+//					else {
+//						errorMessage.setText("Could not connect, please try again");
+//						errorMessage.setVisible(true);
+//						textField_hostname.setText("");
+//						textField_portnumber.setText("");
+//						textField_username.setText("");
+//					}
+					
+					clientManagerGUI = new ClientManagerGUI(client);
+					frame.dispose();
 					
 				}
 				catch(Exception e1) {
