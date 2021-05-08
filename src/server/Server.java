@@ -9,32 +9,28 @@ import remote.IRemoteWhiteBoard;
 public class Server {
 	
 	private int portNumber;
-	private String hostName;
+//	private String hostName;
 	
 	public Server() {
 		try{
 			// Get input from the command line
 			Scanner commandLineInput = new Scanner(System.in);
-			System.out.println("Enter host name: ");
-			hostName = commandLineInput.nextLine().strip();
 			System.out.println("Enter port number: ");
 			portNumber = Integer.parseInt(commandLineInput.nextLine().strip());
 			
-			System.out.println("Host name: " + hostName);
 			System.out.println("Port number: " + portNumber);
 			
-//			while(portNumber > 65535 || portNumber <= 0) {
-//				System.out.println("Please enter a correct port number: ");
-//				portNumber = Integer.parseInt(commandLineInput.nextLine().strip());
-//			}
+			while(portNumber > 65535 || portNumber <= 0) {
+				System.out.println("Please enter a correct port number: ");
+				portNumber = Integer.parseInt(commandLineInput.nextLine().strip());
+			}
 			
 			commandLineInput.close();
 			
 			// Setup the RMI
-			System.setProperty("java.rmi.server.hostname", hostName);	
 			IRemoteWhiteBoard remoteWhiteBoard = new RemoteWhiteBoard();
 			System.out.println("after creating white board");
-			Registry registry = LocateRegistry.getRegistry(portNumber);
+			Registry registry = LocateRegistry.createRegistry(portNumber);
 			System.out.println("after registry");
             registry.bind("whiteBoard", remoteWhiteBoard);
             
