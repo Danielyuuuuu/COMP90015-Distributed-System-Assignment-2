@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -27,7 +28,7 @@ public class ClientConnectionGUI {
 	private JTextField textField_hostname;
 	private JTextField textField_portnumber;
 	private JTextField textField_username;
-	private ClientManagerGUI clientManagerGUI;
+//	private ClientManagerGUI clientManagerGUI;
 
 	/**
 	 * Launch the application.
@@ -124,15 +125,53 @@ public class ClientConnectionGUI {
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
 					String userName = textField_username.getText().strip();
 					
+					if (userName.equals("")) {
+						errorMessage.setText("Username can not be empty");
+						errorMessage.setVisible(true);
+//						textField_hostname.setText("");
+//						textField_portnumber.setText("");
+						textField_username.setText("");
+					}else {
 					
-					Registry registry = LocateRegistry.getRegistry("localhost", portNumber);
-					IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+						Registry registry = LocateRegistry.getRegistry(hostName, portNumber);
+						IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
+						
+						// Check if the user name already exist
+						//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+						
+						
+						Client client = new Client(hostName, portNumber, userName, registry, remoteWhiteBoard);
+						
+						if (!client.getRMI().userNameAlreadyExist(userName)) {
+							client.getRMI().addNewUser(userName);
+							
+							if (client.getRMI().isManager(userName)) {
+								System.out.println("I am the manager: " + userName);
+								new ClientManagerGUI(client);
+								frame.dispose();
+							}
+							else {
+								System.out.println("I am not the manager: " + userName);
+								new ClientConnectedGUI(client);
+								frame.dispose();
+							}
+						}
+						else {
+							errorMessage.setText("Username already taken, please choose another one");
+							errorMessage.setVisible(true);
+	//						textField_hostname.setText("");
+	//						textField_portnumber.setText("");
+							textField_username.setText("");
+	
+						}
+					}
 					
-					// Check if the user name already exist
-					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-					
-					
-					Client client = new Client(hostName, portNumber, userName, registry, remoteWhiteBoard);
+//					if (!client.getRMI().hasManager()) {
+//						System.out.println("Do not have manager");
+//					}
+//					else {
+//						System.out.println("Already have manager");
+//					}
 					
 //					if (client.initializeRMIConnection()) {
 //						clientManagerGUI = new ClientManagerGUI(client);
@@ -147,11 +186,26 @@ public class ClientConnectionGUI {
 //						textField_username.setText("");
 //					}
 					
-					clientManagerGUI = new ClientManagerGUI(client);
-					frame.dispose();
+//					clientManagerGUI = new ClientManagerGUI(client);
+//					frame.dispose();
 					
 				}
+				catch(NumberFormatException e1) {
+					errorMessage.setText("Please enter the correct port number");
+					errorMessage.setVisible(true);
+					textField_hostname.setText("");
+					textField_portnumber.setText("");
+					textField_username.setText("");
+				}
+				catch(RemoteException e1) {
+					errorMessage.setText("Server not found");
+					errorMessage.setVisible(true);
+					textField_hostname.setText("");
+					textField_portnumber.setText("");
+					textField_username.setText("");
+				}
 				catch(Exception e1) {
+					e1.printStackTrace();
 					errorMessage.setText("Could not connect, please try again");
 					errorMessage.setVisible(true);
 					textField_hostname.setText("");

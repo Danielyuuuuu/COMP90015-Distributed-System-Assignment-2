@@ -11,29 +11,35 @@ import javax.swing.JButton;
 public class ClientConnectedGUI {
 
 	private JFrame frame;
+	private Client client;
 
 	/**
 	 * Launch the application.
 	 */	
-	public void loadGUI() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClientConnectedGUI window = new ClientConnectedGUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+//	public void loadGUI() {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ClientConnectedGUI window = new ClientConnectedGUI();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	
+	
 	/**
 	 * Create the application.
 	 */
-	public ClientConnectedGUI() {
+	public ClientConnectedGUI(Client client) {
+		this.client = client;
 		initialize();
+		frame.setVisible(true);
+
 	}
+
 
 	/**
 	 * Initialize the contents of the frame.

@@ -28,6 +28,10 @@ public class Client {
 
 	}
 	
+	public IRemoteWhiteBoard getRMI() {
+		return remoteWhiteBoard;
+	}
+	
 //	public Boolean initializeRMIConnection() {
 //		//Connect to the rmiregistry that is running on localhost
 //		try {
