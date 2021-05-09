@@ -61,4 +61,10 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		return false;
 	}
 
+	@Override
+	public String[] getUserList() throws RemoteException {
+		// TODO Auto-generated method stub
+		return clients.toArray(new String[0]);
+	}
+
 }

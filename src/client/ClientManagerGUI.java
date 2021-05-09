@@ -7,12 +7,14 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 public class ClientManagerGUI {
 
 	private JFrame frame;
 	private Client client;
-
+	private JList<String> client_list;
 	/**
 	 * Launch the application.
 	 */
@@ -51,7 +53,8 @@ public class ClientManagerGUI {
 		this.client = client;
 		initialize();
 		frame.setVisible(true);
-
+		
+		new Thread(new ClientListener()).start();
 	}
 
 	/**
@@ -73,6 +76,31 @@ public class ClientManagerGUI {
 		btn_newWhiteBoard.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		btn_newWhiteBoard.setBounds(6, 79, 212, 29);
 		frame.getContentPane().add(btn_newWhiteBoard);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(16, 162, 193, 187);
+		frame.getContentPane().add(scrollPane);
+		
+		client_list = new JList();
+		client_list.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
+		scrollPane.setViewportView(client_list);
 	}
+	
+	private class ClientListener implements Runnable{
 
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				while(true) {
+					client_list.setListData(client.getRMI().getUserList());
+//					System.out.println(client_list.toString());
+					Thread.sleep(400);
+				}
+			} catch(Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	}
 }

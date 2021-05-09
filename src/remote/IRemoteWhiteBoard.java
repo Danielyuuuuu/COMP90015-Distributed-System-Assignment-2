@@ -8,4 +8,5 @@ public interface IRemoteWhiteBoard extends Remote{
 	public Boolean userNameAlreadyExist(String userName) throws RemoteException;
 	public void addNewUser(String userName) throws RemoteException;
 	public Boolean isManager(String userName) throws RemoteException;
+	public String[] getUserList() throws RemoteException;
 }
