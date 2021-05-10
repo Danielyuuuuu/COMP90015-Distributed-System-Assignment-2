@@ -1,20 +1,31 @@
 package client;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
+
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 
 public class ClientManagerGUI {
 
 	private JFrame frame;
 	private Client client;
 	private JList<String> client_list;
+	private String selectedUser;
 	/**
 	 * Launch the application.
 	 */
@@ -81,9 +92,36 @@ public class ClientManagerGUI {
 		scrollPane.setBounds(16, 162, 193, 187);
 		frame.getContentPane().add(scrollPane);
 		
-		client_list = new JList();
+		client_list = new JList<String>();
+		client_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		client_list.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
 		scrollPane.setViewportView(client_list);
+		
+		JButton btn_kick = new JButton("Kick User");
+		btn_kick.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		btn_kick.setBounds(6, 121, 212, 29);
+		frame.getContentPane().add(btn_kick);
+		btn_kick.setEnabled(false);
+		
+		client_list.addMouseListener(new MouseAdapter(){
+            public void mousePressed(MouseEvent arg0) {	
+            	selectedUser = client_list.getSelectedValue();
+            	System.out.println("Selected user: " + selectedUser);
+//            	client_list.setSel
+            	if(selectedUser.equals(client.getUserName())) {
+            		btn_kick.setEnabled(false);
+            	}
+            	else {
+            		btn_kick.setEnabled(true);
+            	}
+            }
+        });
+		
+		btn_kick.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("The selected user: " + selectedUser);
+			}
+		});
 	}
 	
 	private class ClientListener implements Runnable{

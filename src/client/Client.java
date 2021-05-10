@@ -32,6 +32,10 @@ public class Client {
 		return remoteWhiteBoard;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	
 //	public Boolean initializeRMIConnection() {
 //		//Connect to the rmiregistry that is running on localhost
 //		try {
