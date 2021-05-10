@@ -10,6 +10,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	private ArrayList<String> clients = new ArrayList<>();
 	private String manager = "";
+	private Boolean isManagerDisconnected = false;
 	
 	protected RemoteWhiteBoard() throws RemoteException {
 
@@ -86,6 +87,18 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void managerDisconnect() throws RemoteException {
+		// TODO Auto-generated method stub
+		isManagerDisconnected = true;
+	}
+
+	@Override
+	public Boolean isManagerDisconnected() throws RemoteException {
+		// TODO Auto-generated method stub
+		return isManagerDisconnected;
 	}
 
 }

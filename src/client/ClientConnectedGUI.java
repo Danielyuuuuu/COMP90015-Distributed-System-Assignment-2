@@ -60,14 +60,14 @@ public class ClientConnectedGUI {
 		
 		JButton btn_joinWhiteBoard = new JButton("Join White Board");
 		btn_joinWhiteBoard.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
-		btn_joinWhiteBoard.setBounds(6, 73, 219, 29);
+		btn_joinWhiteBoard.setBounds(6, 84, 219, 29);
 		frame.getContentPane().add(btn_joinWhiteBoard);
 		
 		lbl_error = new JLabel("New label");
 		lbl_error.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_error.setForeground(Color.RED);
 		lbl_error.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
-		lbl_error.setBounds(6, 178, 488, 29);
+		lbl_error.setBounds(6, 43, 488, 29);
 		frame.getContentPane().add(lbl_error);
 		lbl_error.setVisible(false);
 	}
@@ -81,6 +81,10 @@ public class ClientConnectedGUI {
 				while(true) {
 					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
 						lbl_error.setText("You have been kicked");
+						lbl_error.setVisible(true);
+					}
+					else if(client.getRMI().isManagerDisconnected()) {
+						lbl_error.setText("The manager has ended the connection");
 						lbl_error.setVisible(true);
 					}
 					Thread.sleep(400);

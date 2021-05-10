@@ -26,6 +26,9 @@ public class ClientManagerGUI {
 	private Client client;
 	private JList<String> client_list;
 	private String selectedUser;
+	private JLabel popUpMessage;
+	private JLabel errorMessage;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -104,7 +107,7 @@ public class ClientManagerGUI {
 		frame.getContentPane().add(btn_kick);
 		btn_kick.setEnabled(false);
 		
-		JLabel popUpMessage = new JLabel("New label");
+		popUpMessage = new JLabel("New label");
 		popUpMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		popUpMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		popUpMessage.setForeground(Color.MAGENTA);
@@ -112,13 +115,26 @@ public class ClientManagerGUI {
 		frame.getContentPane().add(popUpMessage);
 		popUpMessage.setVisible(false);
 		
-		JLabel errorMessage = new JLabel("New label");
+		errorMessage = new JLabel("New label");
 		errorMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMessage.setForeground(Color.RED);
 		errorMessage.setBounds(6, 43, 488, 24);
 		frame.getContentPane().add(errorMessage);
 		errorMessage.setVisible(false);
+		
+		// Add a confirm dialog when exiting
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	try {
+					client.getRMI().managerDisconnect();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		});		
 		
 		client_list.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent arg0) {	
@@ -180,4 +196,5 @@ public class ClientManagerGUI {
 		}
 		
 	}
+	
 }

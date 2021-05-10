@@ -28,6 +28,7 @@ public class ClientConnectionGUI {
 	private JTextField textField_hostname;
 	private JTextField textField_portnumber;
 	private JTextField textField_username;
+	private JLabel errorMessage;
 //	private ClientManagerGUI clientManagerGUI;
 
 	/**
@@ -110,7 +111,7 @@ public class ClientConnectionGUI {
 		button_connect.setBounds(179, 285, 145, 30);
 		frame.getContentPane().add(button_connect);
 		
-		JLabel errorMessage = new JLabel("New label");
+		errorMessage = new JLabel("New label");
 		errorMessage.setForeground(Color.RED);
 		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
