@@ -73,6 +73,7 @@ public class ClientManagerGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.getContentPane().setForeground(Color.BLACK);
 		frame.setBounds(100, 100, 500, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -103,8 +104,26 @@ public class ClientManagerGUI {
 		frame.getContentPane().add(btn_kick);
 		btn_kick.setEnabled(false);
 		
+		JLabel popUpMessage = new JLabel("New label");
+		popUpMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		popUpMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		popUpMessage.setForeground(Color.MAGENTA);
+		popUpMessage.setBounds(6, 43, 488, 24);
+		frame.getContentPane().add(popUpMessage);
+		popUpMessage.setVisible(false);
+		
+		JLabel errorMessage = new JLabel("New label");
+		errorMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		errorMessage.setForeground(Color.RED);
+		errorMessage.setBounds(6, 43, 488, 24);
+		frame.getContentPane().add(errorMessage);
+		errorMessage.setVisible(false);
+		
 		client_list.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent arg0) {	
+            	popUpMessage.setVisible(false);
+            	errorMessage.setVisible(false);
             	selectedUser = client_list.getSelectedValue();
             	System.out.println("Selected user: " + selectedUser);
 //            	client_list.setSel
@@ -119,7 +138,27 @@ public class ClientManagerGUI {
 		
 		btn_kick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				popUpMessage.setVisible(false);
+            	errorMessage.setVisible(false);
 				System.out.println("The selected user: " + selectedUser);
+				
+				try {
+					if (client.getRMI().kickUser(selectedUser)) {
+						popUpMessage.setText("User: " + selectedUser + " has been kicked");
+						popUpMessage.setVisible(true);
+					}
+					else {
+						errorMessage.setText("User: " + selectedUser + " does not exist");
+						errorMessage.setVisible(true);
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					popUpMessage.setVisible(false);
+	            	errorMessage.setVisible(true);
+	            	errorMessage.setText("User: " + selectedUser + " does not exist");
+	            	
+				}
 			}
 		});
 	}

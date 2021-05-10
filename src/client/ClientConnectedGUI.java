@@ -7,12 +7,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import java.awt.Color;
 
 public class ClientConnectedGUI {
 
 	private JFrame frame;
 	private Client client;
-
+	private JLabel lbl_error;
 	/**
 	 * Launch the application.
 	 */	
@@ -37,7 +38,8 @@ public class ClientConnectedGUI {
 		this.client = client;
 		initialize();
 		frame.setVisible(true);
-
+		
+		new Thread(new ClientListener()).start();
 	}
 
 
@@ -60,6 +62,33 @@ public class ClientConnectedGUI {
 		btn_joinWhiteBoard.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		btn_joinWhiteBoard.setBounds(6, 73, 219, 29);
 		frame.getContentPane().add(btn_joinWhiteBoard);
+		
+		lbl_error = new JLabel("New label");
+		lbl_error.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_error.setForeground(Color.RED);
+		lbl_error.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		lbl_error.setBounds(6, 178, 488, 29);
+		frame.getContentPane().add(lbl_error);
+		lbl_error.setVisible(false);
 	}
+	
+	private class ClientListener implements Runnable{
 
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				while(true) {
+					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
+						lbl_error.setText("You have been kicked");
+						lbl_error.setVisible(true);
+					}
+					Thread.sleep(400);
+				}
+			} catch(Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	}
 }

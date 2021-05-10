@@ -9,4 +9,6 @@ public interface IRemoteWhiteBoard extends Remote{
 	public void addNewUser(String userName) throws RemoteException;
 	public Boolean isManager(String userName) throws RemoteException;
 	public String[] getUserList() throws RemoteException;
+	public Boolean haveIBeenKicked(String userName) throws RemoteException;
+	public Boolean kickUser(String userName) throws RemoteException;
 }

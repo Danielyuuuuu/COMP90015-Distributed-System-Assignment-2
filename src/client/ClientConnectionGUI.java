@@ -118,6 +118,7 @@ public class ClientConnectionGUI {
 		frame.getContentPane().add(errorMessage);
 		errorMessage.setVisible(false);
 		
+		
 		button_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {

@@ -67,4 +67,25 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		return clients.toArray(new String[0]);
 	}
 
+	@Override
+	public Boolean haveIBeenKicked(String userName) throws RemoteException {
+		// TODO Auto-generated method stub
+		for (String client: clients) {
+			if (client.equals(userName)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean kickUser(String userName) throws RemoteException {
+		// TODO Auto-generated method stub
+		if (clients.contains(userName)){
+			clients.remove(userName);
+			return true;
+		}
+		return false;
+	}
+
 }
