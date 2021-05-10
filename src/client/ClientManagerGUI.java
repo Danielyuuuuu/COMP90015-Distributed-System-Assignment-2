@@ -20,6 +20,13 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
+
+
+import java.awt.Canvas;
+import java.awt.Graphics;
+import javax.swing.JFrame;
+
+
 public class ClientManagerGUI {
 
 	private JFrame frame;
