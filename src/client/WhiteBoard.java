@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
+import java.io.EOFException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
 	protected Graphics2D g;
 	private Client client;
+	
 	
 	public WhiteBoard(Client client) {
 		this.client = client;
@@ -57,12 +59,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			g.draw(line);
 			x1 = x2;
 			y1 = y2;
-			try {
-				client.getRMI().drawWhiteBoard((Shape) line);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				client.getRMI().drawWhiteBoard((Shape) line);
+//			} catch (RemoteException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 	}
 
@@ -109,6 +111,14 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 	
+	public void updateBoardContent(ArrayList<Shape> whiteBoardContent) {
+		for (Shape content: whiteBoardContent) {
+			if (!this.whiteBoardContent.contains(content)) {
+				this.whiteBoardContent.add(content);
+			}
+		}
+	}
+	
 //	public static void main(String[] args) {
 //		new WhiteBoard().setVisible(true);
 //	}
@@ -121,9 +131,11 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			try {
 				while(true) {
 					drawExistingContent(client.getRMI().getWhiteBoardContent());
+					client.getRMI().drawWhiteBoard(whiteBoardContent);
+					whiteBoardContent = new ArrayList<Shape>();
 					Thread.sleep(400);
 				}
-			} catch(Exception e1) {
+			}catch(Exception e1) {
 				e1.printStackTrace();
 			}
 		}

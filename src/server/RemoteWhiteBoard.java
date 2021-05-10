@@ -118,9 +118,15 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public void drawWhiteBoard(Shape line) throws RemoteException {
+	public void drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException {
 		// TODO Auto-generated method stub
-		whiteBoardContent.add(line);
+//		whiteBoardContent.add(line);
+//		for (Shape content: whiteBoardContent) {
+//			if (!this.whiteBoardContent.contains(content)) {
+//				this.whiteBoardContent.add(content);
+//			}
+//		}
+		this.whiteBoardContent.addAll(whiteBoardContent);
 	}
 
 	@Override
