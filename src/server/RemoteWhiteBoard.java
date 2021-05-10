@@ -101,4 +101,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		return isManagerDisconnected;
 	}
 
+	@Override
+	public void clientDisconnect(String userName) throws RemoteException {
+		// TODO Auto-generated method stub
+		if (clients.contains(userName)){
+			clients.remove(userName);
+		}
+	}
+
 }

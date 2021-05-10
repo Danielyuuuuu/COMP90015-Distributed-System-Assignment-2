@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.rmi.RemoteException;
+
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -70,6 +72,18 @@ public class ClientConnectedGUI {
 		lbl_error.setBounds(6, 43, 488, 29);
 		frame.getContentPane().add(lbl_error);
 		lbl_error.setVisible(false);
+		
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	try {
+					client.getRMI().clientDisconnect(client.getUserName());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		});	
 	}
 	
 	private class ClientListener implements Runnable{
