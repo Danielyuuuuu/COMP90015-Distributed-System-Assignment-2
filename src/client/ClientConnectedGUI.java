@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 import javax.swing.SwingConstants;
@@ -84,6 +86,13 @@ public class ClientConnectedGUI {
 				}
 		    }
 		});	
+		
+		btn_joinWhiteBoard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WhiteBoard whiteBoard = new WhiteBoard(client);
+				whiteBoard.setVisible(true);
+			}
+		});
 	}
 	
 	private class ClientListener implements Runnable{

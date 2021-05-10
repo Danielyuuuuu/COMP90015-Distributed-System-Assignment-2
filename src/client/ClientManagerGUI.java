@@ -159,6 +159,14 @@ public class ClientManagerGUI {
             }
         });
 		
+		
+		btn_newWhiteBoard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new WhiteBoard(client).setVisible(true);
+			}
+		});
+		
+		
 		btn_kick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				popUpMessage.setVisible(false);

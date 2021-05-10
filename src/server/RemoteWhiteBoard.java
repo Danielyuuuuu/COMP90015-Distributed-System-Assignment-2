@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.Shape;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private ArrayList<String> clients = new ArrayList<>();
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
+	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
 	
 	protected RemoteWhiteBoard() throws RemoteException {
 
@@ -107,6 +109,24 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		if (clients.contains(userName)){
 			clients.remove(userName);
 		}
+	}
+
+	@Override
+	public void resetWhiteBoard() throws RemoteException {
+		// TODO Auto-generated method stub
+		whiteBoardContent = new ArrayList<Shape>();
+	}
+
+	@Override
+	public void drawWhiteBoard(Shape line) throws RemoteException {
+		// TODO Auto-generated method stub
+		whiteBoardContent.add(line);
+	}
+
+	@Override
+	public ArrayList<Shape> getWhiteBoardContent() throws RemoteException {
+		// TODO Auto-generated method stub
+		return whiteBoardContent;
 	}
 
 }

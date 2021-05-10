@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -18,10 +19,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
-	private ArrayList<Shape> shapeList = new ArrayList<Shape>();
+	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
 	protected Graphics2D g;
+	private Client client;
 	
-	public WhiteBoard() {
+	public WhiteBoard(Client client) {
+		this.client = client;
 		panel = new JPanel();
 		setBounds(100, 100, 500, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,26 +36,33 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		canvas.setSize(500, 400); 
 		canvas.addMouseMotionListener(this);
 		canvas.addMouseListener(this);
-		panel.add(canvas);
 		canvas.setBackground(Color.WHITE);
+		panel.add(canvas);
 		
 		setVisible(true);
 		g =(Graphics2D)canvas.getGraphics();
+		
+		new Thread(new WhiteBoardListener()).start();
 	}
 	
 	@Override
 	public void mouseDragged(MouseEvent e){
-		Point p = canvas.getMousePosition();
+		Point position = canvas.getMousePosition();
 		
-		if(p!=null) {
-			x2 = p.x;
-			y2 = p.y;
-			Line2D a = new Line2D.Float(x1, y1, x2, y2);
-			shapeList.add(a);
-			g.draw(a);
+		if(position!=null) {
+			x2 = position.x;
+			y2 = position.y;
+			Line2D line = new Line2D.Float(x1, y1, x2, y2);
+			whiteBoardContent.add(line);
+			g.draw(line);
 			x1 = x2;
 			y1 = y2;
-			
+			try {
+				client.getRMI().drawWhiteBoard((Shape) line);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -93,7 +103,30 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 	}
 	
-	public static void main(String[] args) {
-		new WhiteBoard().setVisible(true);
+	public void drawExistingContent(ArrayList<Shape> whiteBoardContent) {
+		for (Shape content: whiteBoardContent) {
+			g.draw(content);
+		}
+	}
+	
+//	public static void main(String[] args) {
+//		new WhiteBoard().setVisible(true);
+//	}
+	
+	private class WhiteBoardListener implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				while(true) {
+					drawExistingContent(client.getRMI().getWhiteBoardContent());
+					Thread.sleep(400);
+				}
+			} catch(Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 	}
 }
