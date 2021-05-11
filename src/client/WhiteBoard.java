@@ -7,16 +7,21 @@ import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
 
 
 public class WhiteBoard extends JFrame implements MouseListener, MouseMotionListener{
@@ -28,6 +33,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
+	private Mode mode = Mode.LINE;
 
 
 	/**
@@ -51,16 +57,46 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		canvas = new Canvas();
 		canvas.setLocation(0, 100);
-		canvas.setSize(500, 400); 
+		canvas.setSize(500, 272); 
 		canvas.addMouseMotionListener(this);
 		canvas.addMouseListener(this);
 		canvas.setBackground(Color.WHITE);
 		panel.add(canvas);
 		
+		JButton btn_line = new JButton("Line");
+		btn_line.setBounds(0, 6, 117, 29);
+		panel.add(btn_line);
+		
+		JButton btn_clrcle = new JButton("Circle");
+		btn_clrcle.setBounds(129, 6, 117, 29);
+		panel.add(btn_clrcle);
+		
+		JButton btn_rectangle = new JButton("Rectangle");
+		btn_rectangle.setBounds(258, 6, 117, 29);
+		panel.add(btn_rectangle);
+		
 		setVisible(true);
 		g =(Graphics2D)canvas.getGraphics();
 		
 		new Thread(new WhiteBoardListener()).start();
+		
+		btn_line.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.LINE;
+			}
+		});
+		
+		btn_clrcle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.CIRCLE;
+			}
+		});
+		
+		btn_rectangle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.RECTANGLE;
+			}
+		});
 	}
 	
 	@Override
@@ -68,21 +104,18 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		Point position = canvas.getMousePosition();
 		
 		if(position!=null) {
-			x2 = position.x;
-			y2 = position.y;
-			Line2D line = new Line2D.Float(x1, y1, x2, y2);
-			isWhiteBoardInUse = true;
-			whiteBoardContent.add(line);
-			isWhiteBoardInUse = false;
-			g.draw(line);
-			x1 = x2;
-			y1 = y2;
-//			try {
-//				client.getRMI().drawWhiteBoard((Shape) line);
-//			} catch (RemoteException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+			if (mode == Mode.LINE) {
+				x2 = position.x;
+				y2 = position.y;
+				Line2D line = new Line2D.Float(x1, y1, x2, y2);
+				g.draw(line);
+				isWhiteBoardInUse = true;
+				whiteBoardContent.add(line);
+				isWhiteBoardInUse = false;
+				x1 = x2;
+				y1 = y2;
+			}
+
 		}
 	}
 
@@ -104,6 +137,21 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		if (position != null) {
 			x1 = position.x;
 			y1 = position.y;
+			
+			if (mode == Mode.CIRCLE) {
+				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
+				g.draw(circle);
+				isWhiteBoardInUse = true;
+				whiteBoardContent.add(circle);
+				isWhiteBoardInUse = false;
+			}
+			else if (mode == Mode.RECTANGLE) {
+				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
+				g.draw(rectangle);
+				isWhiteBoardInUse = true;
+				whiteBoardContent.add(rectangle);
+				isWhiteBoardInUse = false;
+			}
 		}
 		
 	}
@@ -160,5 +208,4 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 		
 	}
-
 }
