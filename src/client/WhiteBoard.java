@@ -115,14 +115,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 	
-	public void updateBoardContent(ArrayList<Shape> whiteBoardContent) {
-		for (Shape content: whiteBoardContent) {
-			if (!this.whiteBoardContent.contains(content)) {
-				this.whiteBoardContent.add(content);
-			}
-		}
-	}
-	
 //	public static void main(String[] args) {
 //		new WhiteBoard().setVisible(true);
 //	}
@@ -140,7 +132,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 					Thread.sleep(400);
 				}
 			}catch(ConcurrentModificationException e1) {
-				System.out.println("ConcurrentModificationException");
+//				System.out.println("ConcurrentModificationException");
+				e1.printStackTrace();
 			}
 			catch(Exception e1) {
 				e1.printStackTrace();
