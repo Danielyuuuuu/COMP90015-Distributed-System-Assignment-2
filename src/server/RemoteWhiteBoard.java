@@ -4,6 +4,7 @@ import java.awt.Shape;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import remote.IRemoteWhiteBoard;
 
@@ -13,7 +14,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
 	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
-	
+	private Boolean isUpdatingWhiteBoardContent = false;
 	protected RemoteWhiteBoard() throws RemoteException {
 
 	}
@@ -114,7 +115,17 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	@Override
 	public void resetWhiteBoard() throws RemoteException {
 		// TODO Auto-generated method stub
+		while (this.isUpdatingWhiteBoardContent) {
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.isUpdatingWhiteBoardContent = true;
 		whiteBoardContent = new ArrayList<Shape>();
+		this.isUpdatingWhiteBoardContent = false;
 	}
 
 	@Override
@@ -126,7 +137,17 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //				this.whiteBoardContent.add(content);
 //			}
 //		}
+		while (this.isUpdatingWhiteBoardContent) {
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.isUpdatingWhiteBoardContent = true;
 		this.whiteBoardContent.addAll(whiteBoardContent);
+		this.isUpdatingWhiteBoardContent = false;
 	}
 
 	@Override

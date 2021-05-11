@@ -12,6 +12,7 @@ import java.awt.geom.Line2D;
 import java.io.EOFException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -82,9 +83,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		Point p = canvas.getMousePosition();
-		x1 = p.x;
-		y1 = p.y;
+		Point position = canvas.getMousePosition();
+		if (position != null) {
+			x1 = position.x;
+			y1 = position.y;
+		}
+		
 	}
 
 	@Override
@@ -135,7 +139,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 					whiteBoardContent = new ArrayList<Shape>();
 					Thread.sleep(400);
 				}
-			}catch(Exception e1) {
+			}catch(ConcurrentModificationException e1) {
+				System.out.println("ConcurrentModificationException");
+			}
+			catch(Exception e1) {
 				e1.printStackTrace();
 			}
 		}
