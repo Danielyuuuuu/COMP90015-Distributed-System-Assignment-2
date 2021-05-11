@@ -22,6 +22,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
 	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
+	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
 	
@@ -56,7 +57,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			x2 = position.x;
 			y2 = position.y;
 			Line2D line = new Line2D.Float(x1, y1, x2, y2);
+			isWhiteBoardInUse = true;
 			whiteBoardContent.add(line);
+			isWhiteBoardInUse = false;
 			g.draw(line);
 			x1 = x2;
 			y1 = y2;
@@ -126,10 +129,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			// TODO Auto-generated method stub
 			try {
 				while(true) {
-					drawExistingContent(client.getRMI().getWhiteBoardContent());
-					client.getRMI().drawWhiteBoard(whiteBoardContent);
-					whiteBoardContent = new ArrayList<Shape>();
-					Thread.sleep(400);
+					while(!isWhiteBoardInUse) {
+						drawExistingContent(client.getRMI().getWhiteBoardContent());
+						client.getRMI().drawWhiteBoard(whiteBoardContent);
+						whiteBoardContent = new ArrayList<Shape>();
+						Thread.sleep(400);
+					}
 				}
 			}catch(ConcurrentModificationException e1) {
 //				System.out.println("ConcurrentModificationException");
