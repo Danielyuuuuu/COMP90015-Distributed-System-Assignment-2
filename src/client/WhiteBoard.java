@@ -1,7 +1,9 @@
 package client;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
@@ -9,15 +11,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
-import java.io.EOFException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 
 public class WhiteBoard extends JFrame implements MouseListener, MouseMotionListener{
+
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
@@ -25,9 +28,20 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
-	
-	
+
+
+	/**
+	 * Create the frame.
+	 */
 	public WhiteBoard(Client client) {
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setBounds(100, 100, 450, 300);
+//		contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//		contentPane.setLayout(new BorderLayout(0, 0));
+//		setContentPane(contentPane);
+		
+		
 		this.client = client;
 		panel = new JPanel();
 		setBounds(100, 100, 500, 400);
@@ -36,7 +50,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		panel.setLayout(null);
 		
 		canvas = new Canvas();
-		canvas.setLocation(0, 0);
+		canvas.setLocation(0, 100);
 		canvas.setSize(500, 400); 
 		canvas.addMouseMotionListener(this);
 		canvas.addMouseListener(this);
@@ -129,12 +143,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			// TODO Auto-generated method stub
 			try {
 				while(true) {
-					while(!isWhiteBoardInUse) {
 						drawExistingContent(client.getRMI().getWhiteBoardContent());
 						client.getRMI().drawWhiteBoard(whiteBoardContent);
 						whiteBoardContent = new ArrayList<Shape>();
 						Thread.sleep(400);
-					}
+					
+					
 				}
 			}catch(ConcurrentModificationException e1) {
 //				System.out.println("ConcurrentModificationException");
@@ -146,4 +160,5 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 		
 	}
+
 }
