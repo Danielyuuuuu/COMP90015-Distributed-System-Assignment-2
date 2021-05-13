@@ -17,7 +17,7 @@ public interface IRemoteWhiteBoard extends Remote{
 	public void managerDisconnect() throws RemoteException;
 	public Boolean isManagerDisconnected() throws RemoteException;
 	public void clientDisconnect(String userName) throws RemoteException;
-	public void resetWhiteBoard() throws RemoteException;
-	public void drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException;
+	public Boolean resetWhiteBoard() throws RemoteException;
+	public Boolean drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException;
 	public ArrayList<Shape> getWhiteBoardContent() throws RemoteException;
 }

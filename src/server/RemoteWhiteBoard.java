@@ -113,23 +113,21 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public void resetWhiteBoard() throws RemoteException {
+	public Boolean resetWhiteBoard() throws RemoteException {
 		// TODO Auto-generated method stub
-		while (this.isUpdatingWhiteBoardContent) {
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (!this.isUpdatingWhiteBoardContent) {
+			this.isUpdatingWhiteBoardContent = true;
+			whiteBoardContent = new ArrayList<Shape>();
+			this.isUpdatingWhiteBoardContent = false;
+			return true;
 		}
-		this.isUpdatingWhiteBoardContent = true;
-		whiteBoardContent = new ArrayList<Shape>();
-		this.isUpdatingWhiteBoardContent = false;
+		return false;
+		
+		
 	}
 
 	@Override
-	public void drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException {
+	public Boolean drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException {
 		// TODO Auto-generated method stub
 //		whiteBoardContent.add(line);
 //		for (Shape content: whiteBoardContent) {
@@ -137,17 +135,22 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //				this.whiteBoardContent.add(content);
 //			}
 //		}
-		while (this.isUpdatingWhiteBoardContent) {
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//		while (this.isUpdatingWhiteBoardContent) {
+//			try {
+//				TimeUnit.SECONDS.sleep(1);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		if (!this.isUpdatingWhiteBoardContent) {
+			this.isUpdatingWhiteBoardContent = true;
+			this.whiteBoardContent.addAll(whiteBoardContent);
+			this.isUpdatingWhiteBoardContent = false;
+			return true;
 		}
-		this.isUpdatingWhiteBoardContent = true;
-		this.whiteBoardContent.addAll(whiteBoardContent);
-		this.isUpdatingWhiteBoardContent = false;
+		return false;
+		
 	}
 
 	@Override

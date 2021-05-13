@@ -15,6 +15,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -72,11 +73,19 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		panel.add(btn_clrcle);
 		
 		JButton btn_rectangle = new JButton("Rectangle");
-		btn_rectangle.setBounds(258, 6, 117, 29);
+		btn_rectangle.setBounds(383, 6, 117, 29);
 		panel.add(btn_rectangle);
 		
+		JButton btn_oval = new JButton("Oval");
+		btn_oval.setBounds(258, 6, 117, 29);
+		panel.add(btn_oval);
+		
+		JButton btn_clearBoard = new JButton("Clear Board");
+		btn_clearBoard.setBounds(383, 65, 117, 29);
+		panel.add(btn_clearBoard);
+		
 		setVisible(true);
-		g =(Graphics2D)canvas.getGraphics();
+		g = (Graphics2D)canvas.getGraphics();
 		
 		new Thread(new WhiteBoardListener()).start();
 		
@@ -92,9 +101,32 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 		});
 		
+		btn_oval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.OVAL;
+			}
+		});
+		
 		btn_rectangle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mode = Mode.RECTANGLE;
+			}
+		});
+		
+		btn_clearBoard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					while (!client.getRMI().resetWhiteBoard()) {
+						
+					}
+//					g.setColor(getBackground());
+	                g.clearRect(0, 0, 500, 272);
+					System.out.println("clear board");
+					
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}
@@ -145,6 +177,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				whiteBoardContent.add(circle);
 				isWhiteBoardInUse = false;
 			}
+			else if (mode == Mode.OVAL) {
+				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
+				g.draw(oval);
+				isWhiteBoardInUse = true;
+				whiteBoardContent.add(oval);
+				isWhiteBoardInUse = false;
+			}
 			else if (mode == Mode.RECTANGLE) {
 				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
 				g.draw(rectangle);
@@ -192,7 +231,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			try {
 				while(true) {
 						drawExistingContent(client.getRMI().getWhiteBoardContent());
-						client.getRMI().drawWhiteBoard(whiteBoardContent);
+						while (!client.getRMI().drawWhiteBoard(whiteBoardContent)){
+							Thread.sleep(50);
+						}
 						whiteBoardContent = new ArrayList<Shape>();
 						Thread.sleep(400);
 					
