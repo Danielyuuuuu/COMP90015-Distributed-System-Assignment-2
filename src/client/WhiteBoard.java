@@ -18,6 +18,7 @@ import java.awt.geom.Rectangle2D;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -214,9 +215,15 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	}
 	
 	public void drawExistingContent(ArrayList<Shape> whiteBoardContent) {
+		g.clearRect(0, 0, 500, 272);
 		for (Shape content: whiteBoardContent) {
 			g.draw(content);
 		}
+		Iterator<Shape> it = this.whiteBoardContent.iterator();
+		while(it.hasNext()) {
+			g.draw(it.next());
+		}
+		
 	}
 	
 //	public static void main(String[] args) {
