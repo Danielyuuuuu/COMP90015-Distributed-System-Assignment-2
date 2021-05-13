@@ -143,20 +143,25 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //				e.printStackTrace();
 //			}
 //		}
+
 		if (!this.isUpdatingWhiteBoardContent) {
-			this.isUpdatingWhiteBoardContent = true;
-			this.whiteBoardContent.addAll(whiteBoardContent);
-			this.isUpdatingWhiteBoardContent = false;
-			return true;
+			synchronized (this.whiteBoardContent) {
+				this.isUpdatingWhiteBoardContent = true;
+				this.whiteBoardContent.addAll(whiteBoardContent);
+				this.isUpdatingWhiteBoardContent = false;
+				return true;
+			}
+
 		}
 		return false;
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Shape> getWhiteBoardContent() throws RemoteException {
 		// TODO Auto-generated method stub
-		return whiteBoardContent;
+		return (ArrayList<Shape>) whiteBoardContent.clone();
 	}
 
 }
