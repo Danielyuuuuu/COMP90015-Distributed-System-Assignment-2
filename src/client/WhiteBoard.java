@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -96,6 +97,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		btn_blue.setBounds(129, 65, 117, 29);
 		panel.add(btn_blue);
 		
+		JButton btn_text = new JButton("Text");
+		btn_text.setBounds(0, 36, 117, 29);
+		panel.add(btn_text);
+		
 		setVisible(true);
 		g = (Graphics2D)canvas.getGraphics();
 		
@@ -133,7 +138,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 						
 					}
 //					g.setColor(getBackground());
+					
 	                g.clearRect(0, 0, 500, 272);
+	                
 					System.out.println("clear board");
 					
 				} catch (RemoteException e1) {
@@ -152,6 +159,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		btn_blue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				g.setColor(Color.BLUE);
+			}
+		});
+		
+		btn_text.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.TEXT;
 			}
 		});
 	}
@@ -215,6 +228,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				isWhiteBoardInUse = true;
 				whiteBoardContent.add(rectangle);
 				isWhiteBoardInUse = false;
+			}
+			else if (mode == Mode.TEXT) {
+				String text = JOptionPane.showInputDialog(panel, "Input Text");
+				g.drawString(text, x1, y1);
 			}
 		}
 		

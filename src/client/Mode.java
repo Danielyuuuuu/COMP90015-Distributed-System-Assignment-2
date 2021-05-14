@@ -4,5 +4,6 @@ public enum Mode {
 	LINE,
 	CIRCLE,
 	OVAL,
-	RECTANGLE
+	RECTANGLE,
+	TEXT
 }
