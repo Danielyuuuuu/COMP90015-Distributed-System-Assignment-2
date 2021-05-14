@@ -87,10 +87,17 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		btn_clearBoard.setBounds(383, 65, 117, 29);
 		panel.add(btn_clearBoard);
 		
+		JButton btn_black = new JButton("Black");
+		btn_black.setBounds(0, 65, 117, 29);
+		panel.add(btn_black);
+		
+		JButton btn_blue = new JButton("Blue");
+		btn_blue.setBounds(129, 65, 117, 29);
+		panel.add(btn_blue);
+		
 		setVisible(true);
 		g = (Graphics2D)canvas.getGraphics();
 		
-		g.setColor(Color.BLUE);
 		
 		new Thread(new WhiteBoardListener()).start();
 		
@@ -132,6 +139,18 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+		});
+		
+		btn_black.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				g.setColor(Color.BLACK);
+			}
+		});
+		
+		btn_blue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				g.setColor(Color.BLUE);
 			}
 		});
 	}
