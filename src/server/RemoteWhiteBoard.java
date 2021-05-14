@@ -148,12 +148,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //		}
 
 		if (!this.isUpdatingWhiteBoardContent) {
-//			synchronized (this.whiteBoardContent) {
-			this.isUpdatingWhiteBoardContent = true;
-			this.whiteBoardContent.addAll(whiteBoardContent);
-			this.isUpdatingWhiteBoardContent = false;
-			return true;
-//			}
+			synchronized (this.whiteBoardContent) {
+				this.isUpdatingWhiteBoardContent = true;
+				this.whiteBoardContent.addAll(whiteBoardContent);
+				this.isUpdatingWhiteBoardContent = false;
+				return true;
+			}
 
 		}
 		return false;

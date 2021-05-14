@@ -90,6 +90,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		setVisible(true);
 		g = (Graphics2D)canvas.getGraphics();
 		
+		g.setColor(Color.BLUE);
+		
 		new Thread(new WhiteBoardListener()).start();
 		
 		btn_line.addActionListener(new ActionListener() {
