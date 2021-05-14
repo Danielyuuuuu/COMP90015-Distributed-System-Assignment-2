@@ -17,6 +17,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +33,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
-	private List<Shape> whiteBoardContent = new ArrayList<Shape>();
+	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
