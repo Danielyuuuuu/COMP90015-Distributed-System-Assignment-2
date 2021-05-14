@@ -4,6 +4,8 @@ import java.awt.Shape;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import remote.IRemoteWhiteBoard;
@@ -13,7 +15,8 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private ArrayList<String> clients = new ArrayList<>();
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
-	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
+//	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
+	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 	private Boolean isUpdatingWhiteBoardContent = false;
 	protected RemoteWhiteBoard() throws RemoteException {
 
@@ -127,7 +130,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public Boolean drawWhiteBoard(ArrayList<Shape> whiteBoardContent) throws RemoteException {
+	public Boolean drawWhiteBoard(List<Shape> whiteBoardContent) throws RemoteException {
 		// TODO Auto-generated method stub
 //		whiteBoardContent.add(line);
 //		for (Shape content: whiteBoardContent) {
@@ -145,12 +148,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //		}
 
 		if (!this.isUpdatingWhiteBoardContent) {
-			synchronized (this.whiteBoardContent) {
-				this.isUpdatingWhiteBoardContent = true;
-				this.whiteBoardContent.addAll(whiteBoardContent);
-				this.isUpdatingWhiteBoardContent = false;
-				return true;
-			}
+//			synchronized (this.whiteBoardContent) {
+			this.isUpdatingWhiteBoardContent = true;
+			this.whiteBoardContent.addAll(whiteBoardContent);
+			this.isUpdatingWhiteBoardContent = false;
+			return true;
+//			}
 
 		}
 		return false;
@@ -159,9 +162,9 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<Shape> getWhiteBoardContent() throws RemoteException {
+	public List<Shape> getWhiteBoardContent() throws RemoteException {
 		// TODO Auto-generated method stub
-		return (ArrayList<Shape>) whiteBoardContent.clone();
+		return whiteBoardContent;
 	}
 
 }

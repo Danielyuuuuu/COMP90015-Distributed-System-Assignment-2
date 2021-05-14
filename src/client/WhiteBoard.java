@@ -19,6 +19,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
-	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
+	private List<Shape> whiteBoardContent = new ArrayList<Shape>();
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
@@ -214,7 +215,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 	}
 	
-	public void drawExistingContent(ArrayList<Shape> whiteBoardContent) {
+	public void drawExistingContent(List<Shape> whiteBoardContent) {
 		g.clearRect(0, 0, 500, 272);
 		for (Shape content: whiteBoardContent) {
 			g.draw(content);
