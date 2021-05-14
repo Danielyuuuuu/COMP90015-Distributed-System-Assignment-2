@@ -37,6 +37,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	protected Graphics2D g;
 	private Client client;
 	private Mode mode = Mode.LINE;
+	private int currentWhiteBoardSize = 0;
 
 
 	/**
@@ -216,7 +217,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	}
 	
 	public void drawExistingContent(List<Shape> whiteBoardContent) {
-		g.clearRect(0, 0, 500, 272);
+		
+		if (this.currentWhiteBoardSize > whiteBoardContent.size()) {
+			g.clearRect(0, 0, 500, 272);
+		}
+		this.currentWhiteBoardSize = whiteBoardContent.size();
+		
 		for (Shape content: whiteBoardContent) {
 			g.draw(content);
 		}
