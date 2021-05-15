@@ -12,12 +12,15 @@ import remote.IRemoteWhiteBoard;
 
 public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhiteBoard{
 
-	private ArrayList<String> clients = new ArrayList<>();
+	private List<String> clients = Collections.synchronizedList(new ArrayList<String>());
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
 //	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
 	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 	private Boolean isUpdatingWhiteBoardContent = false;
+	
+	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
+	
 	protected RemoteWhiteBoard() throws RemoteException {
 
 	}
