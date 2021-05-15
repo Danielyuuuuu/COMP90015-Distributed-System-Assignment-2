@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.Color;
 import java.awt.Shape;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import remote.IRemoteWhiteBoard;
@@ -17,7 +19,9 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
 //	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
-	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
+//	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
+	ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
+	
 	private Boolean isUpdatingWhiteBoardContent = false;
 	
 	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
@@ -125,7 +129,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		// TODO Auto-generated method stub
 		if (!this.isUpdatingWhiteBoardContent) {
 			this.isUpdatingWhiteBoardContent = true;
-			whiteBoardContent = new ArrayList<Shape>();
+			whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 			this.isUpdatingWhiteBoardContent = false;
 			return true;
 		}
@@ -135,7 +139,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public Boolean drawWhiteBoard(List<Shape> whiteBoardContent) throws RemoteException {
+	public Boolean drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException {
 		// TODO Auto-generated method stub
 //		whiteBoardContent.add(line);
 //		for (Shape content: whiteBoardContent) {
@@ -153,12 +157,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //		}
 
 		if (!this.isUpdatingWhiteBoardContent) {
-			synchronized (this.whiteBoardContent) {
-				this.isUpdatingWhiteBoardContent = true;
-				this.whiteBoardContent.addAll(whiteBoardContent);
-				this.isUpdatingWhiteBoardContent = false;
-				return true;
-			}
+//			synchronized (this.whiteBoardContent) {
+			this.isUpdatingWhiteBoardContent = true;
+			this.whiteBoardContent.putAll(whiteBoardContent);
+			this.isUpdatingWhiteBoardContent = false;
+			return true;
+//			}
 
 		}
 		return false;
@@ -167,7 +171,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Shape> getWhiteBoardContent() throws RemoteException {
+	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException {
 		// TODO Auto-generated method stub
 		return whiteBoardContent;
 	}
@@ -234,5 +238,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		this.clientsDeclinedList.add(clientName);
 		this.clientsWaitList.remove(clientName);
 	}
+
+
 
 }

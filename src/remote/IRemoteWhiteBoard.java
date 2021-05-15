@@ -5,6 +5,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 
 public interface IRemoteWhiteBoard extends Remote{
 	public void printHello() throws RemoteException;
@@ -19,8 +21,8 @@ public interface IRemoteWhiteBoard extends Remote{
 	public Boolean isManagerDisconnected() throws RemoteException;
 	public void clientDisconnect(String userName) throws RemoteException;
 	public Boolean resetWhiteBoard() throws RemoteException;
-	public Boolean drawWhiteBoard(List<Shape> whiteBoardContent) throws RemoteException;
-	public List<Shape> getWhiteBoardContent() throws RemoteException;
+	public Boolean drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException;
+	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException;
 	public List<String> getClientsWaitList() throws RemoteException;
 	public void addClientToWaitList(String clientName) throws RemoteException;
 	public Boolean isClientInDeclinedList(String clientName) throws RemoteException;

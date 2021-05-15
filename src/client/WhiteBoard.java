@@ -19,8 +19,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,7 +36,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
-	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
+//	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
+//	private Hashtable<Shape, Color> whiteBoardContent = new Hashtable<>();
+	ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
+	
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
@@ -180,7 +185,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Line2D line = new Line2D.Float(x1, y1, x2, y2);
 				g.draw(line);
 				isWhiteBoardInUse = true;
-				whiteBoardContent.add(line);
+//				whiteBoardContent.add(line);
+				
+				whiteBoardContent.put(line, g.getColor());
+				
 				isWhiteBoardInUse = false;
 				x1 = x2;
 				y1 = y2;
@@ -212,21 +220,32 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
 				g.draw(circle);
 				isWhiteBoardInUse = true;
-				whiteBoardContent.add(circle);
+//				whiteBoardContent.add(circle);
+				
+				whiteBoardContent.put(circle, g.getColor());
+				
+				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.OVAL) {
 				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
 				g.draw(oval);
 				isWhiteBoardInUse = true;
-				whiteBoardContent.add(oval);
+//				whiteBoardContent.add(oval);
+				
+				whiteBoardContent.put(oval, g.getColor());
+				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.RECTANGLE) {
 				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
 				g.draw(rectangle);
 				isWhiteBoardInUse = true;
-				whiteBoardContent.add(rectangle);
+//				whiteBoardContent.add(rectangle);
+				
+				whiteBoardContent.put(rectangle, g.getColor());
+
+				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.TEXT) {
@@ -255,21 +274,36 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 	}
 	
-	public void drawExistingContent(List<Shape> whiteBoardContent) {
+	public void drawExistingContent(ConcurrentHashMap<Shape, Color> whiteBoardContent) {
 		
 		if (this.currentWhiteBoardSize > whiteBoardContent.size()) {
 			g.clearRect(0, 0, 500, 272);
 		}
 		this.currentWhiteBoardSize = whiteBoardContent.size();
 		
-		for (Shape content: whiteBoardContent) {
-			g.draw(content);
-		}
-		Iterator<Shape> it = this.whiteBoardContent.iterator();
-		while(it.hasNext()) {
-			g.draw(it.next());
-		}
+//		for (Shape content: whiteBoardContent) {
+//			g.draw(content);
+//		}
 		
+		Iterator<ConcurrentHashMap.Entry<Shape, Color> > itr = ((ConcurrentHashMap<Shape, Color>) whiteBoardContent).entrySet().iterator();
+		while (itr.hasNext()) {
+            ConcurrentHashMap.Entry<Shape, Color> entry = itr.next();
+            g.setColor(entry.getValue());
+            g.draw(entry.getKey());
+        }
+		
+		
+//		Iterator<Shape> it = this.whiteBoardContent.iterator();
+//		while(it.hasNext()) {
+//			g.draw(it.next());
+//		}
+		
+		Iterator<ConcurrentHashMap.Entry<Shape, Color> > itr2 = ((ConcurrentHashMap<Shape, Color>) this.whiteBoardContent).entrySet().iterator();
+		while (itr2.hasNext()) {
+            ConcurrentHashMap.Entry<Shape, Color> entry = itr2.next();
+            g.setColor(entry.getValue());
+            g.draw(entry.getKey());
+        }
 	}
 	
 //	public static void main(String[] args) {
@@ -285,9 +319,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				while(true) {
 						drawExistingContent(client.getRMI().getWhiteBoardContent());
 						while (!client.getRMI().drawWhiteBoard(whiteBoardContent)){
-							Thread.sleep(50);
+							Thread.sleep(100);
 						}
-						whiteBoardContent = new ArrayList<Shape>();
+						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 						Thread.sleep(400);
 					
 					
