@@ -21,4 +21,11 @@ public interface IRemoteWhiteBoard extends Remote{
 	public Boolean resetWhiteBoard() throws RemoteException;
 	public Boolean drawWhiteBoard(List<Shape> whiteBoardContent) throws RemoteException;
 	public List<Shape> getWhiteBoardContent() throws RemoteException;
+	public List<String> getClientsWaitList() throws RemoteException;
+	public void addClientToWaitList(String clientName) throws RemoteException;
+	public Boolean isClientInDeclinedList(String clientName) throws RemoteException;
+//	public void addClientToDeclinedList(String clientName) throws RemoteException;
+	public Boolean isClientInWaitList(String clientName) throws RemoteException;
+	public void acceptClient(String clientName) throws RemoteException;
+	public void declineClient(String clientName) throws RemoteException;
 }

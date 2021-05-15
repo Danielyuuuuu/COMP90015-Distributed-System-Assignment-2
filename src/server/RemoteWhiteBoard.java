@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private Boolean isUpdatingWhiteBoardContent = false;
 	
 	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
+	private List<String> clientsDeclinedList = Collections.synchronizedList(new ArrayList<String>());
 	
 	protected RemoteWhiteBoard() throws RemoteException {
 
@@ -168,6 +170,69 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	public List<Shape> getWhiteBoardContent() throws RemoteException {
 		// TODO Auto-generated method stub
 		return whiteBoardContent;
+	}
+
+	@Override
+	public List<String> getClientsWaitList() throws RemoteException {
+		// TODO Auto-generated method stub
+		return this.clientsWaitList;
+	}
+
+	@Override
+	public void addClientToWaitList(String clientName) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.clientsWaitList.add(clientName);
+	}
+	
+
+	@Override
+	public Boolean isClientInDeclinedList(String clientName) throws RemoteException {
+		// TODO Auto-generated method stub
+		Iterator<String> it = this.clientsDeclinedList.iterator();
+		while(it.hasNext()) {
+			String thisClientName = it.next();
+			System.out.println("isClientInDeclinedList: " + thisClientName + "  " + clientName);
+			if (thisClientName.equals(clientName)) {
+				it.remove();
+				System.out.println("isClientInDeclinedList: returned true");
+				return true;
+			}
+		}
+		System.out.println("isClientInDeclinedList: returned false");
+		return false;
+	}
+
+//	@Override
+//	public void addClientToDeclinedList(String clientName) throws RemoteException {
+//		// TODO Auto-generated method stub
+//		this.clientsDeclinedList.add(clientName);
+//	}
+
+	@Override
+	public Boolean isClientInWaitList(String clientName) throws RemoteException {
+		// TODO Auto-generated method stub
+		Iterator<String> it = this.clientsWaitList.iterator();
+		while(it.hasNext()) {
+			String thisClientName = it.next();
+			if (thisClientName.equals(clientName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void acceptClient(String clientName) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.clients.add(clientName);
+		this.clientsWaitList.remove(clientName);
+	}
+
+	@Override
+	public void declineClient(String clientName) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.clientsDeclinedList.add(clientName);
+		this.clientsWaitList.remove(clientName);
 	}
 
 }

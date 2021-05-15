@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -203,6 +204,22 @@ public class ClientManagerGUI {
 				while(true) {
 					client_list.setListData(client.getRMI().getUserList());
 //					System.out.println(client_list.toString());
+					List<String> clientWaitList = client.getRMI().getClientsWaitList();
+					if (clientWaitList.size() > 0) {
+						int allowToJoin = JOptionPane.showConfirmDialog(
+								frame,
+								String.format(
+									"User %s wants to join the whiteboard.",
+									clientWaitList.get(0)),
+								"New Connection",
+								JOptionPane.YES_NO_OPTION);
+						if (allowToJoin == JOptionPane.YES_OPTION) {
+							client.getRMI().acceptClient(clientWaitList.get(0));
+						}
+						else {
+							client.getRMI().declineClient(clientWaitList.get(0));
+						}
+					}
 					Thread.sleep(400);
 				}
 			} catch(Exception e1) {

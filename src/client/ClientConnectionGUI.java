@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingConstants;
 
@@ -122,6 +123,7 @@ public class ClientConnectionGUI {
 		
 		button_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				errorMessage.setVisible(false);
 				try {
 					String hostName = textField_hostname.getText().strip();
 					int portNumber = Integer.parseInt(textField_portnumber.getText().strip());
@@ -145,18 +147,44 @@ public class ClientConnectionGUI {
 						Client client = new Client(hostName, portNumber, userName, registry, remoteWhiteBoard);
 						
 						if (!client.getRMI().userNameAlreadyExist(userName)) {
-							client.getRMI().addNewUser(userName);
 							
-							if (client.getRMI().isManager(userName)) {
+							
+							if (!client.getRMI().hasManager()) {
+								client.getRMI().addNewUser(userName);
 								System.out.println("I am the manager: " + userName);
 								new ClientManagerGUI(client);
 								frame.dispose();
 							}
 							else {
-								System.out.println("I am not the manager: " + userName);
-								new ClientConnectedGUI(client);
-								frame.dispose();
+								client.getRMI().addClientToWaitList(userName);
+								while (client.getRMI().isClientInWaitList(userName)) {
+									TimeUnit.SECONDS.sleep(1);
+								}
+								if (!client.getRMI().isClientInDeclinedList(userName)) {
+									System.out.println("I am not the manager: " + userName);
+									new ClientConnectedGUI(client);
+									frame.dispose();
+								}
+								else {
+									System.out.println("You are not allowed to enter the white board");
+									errorMessage.setText("You are not allowed to enter the white board");
+									errorMessage.setVisible(true);
+								}
 							}
+							
+							
+//							client.getRMI().addNewUser(userName);
+//							
+//							if (client.getRMI().isManager(userName)) {
+//								System.out.println("I am the manager: " + userName);
+//								new ClientManagerGUI(client);
+//								frame.dispose();
+//							}
+//							else {
+//								System.out.println("I am not the manager: " + userName);
+//								new ClientConnectedGUI(client);
+//								frame.dispose();
+//							}
 						}
 						else {
 							errorMessage.setText("Username already taken, please choose another one");
