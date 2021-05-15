@@ -46,6 +46,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private Mode mode = Mode.LINE;
 	private int currentWhiteBoardSize = 0;
 
+	private Color currentColor = Color.BLACK;
 
 	/**
 	 * Create the frame.
@@ -157,13 +158,17 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		btn_black.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				g.setColor(Color.BLACK);
+//				g.setColor(Color.BLACK);
+				currentColor = Color.BLACK;
+				System.out.println("Changing to Black");
 			}
 		});
 		
 		btn_blue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				g.setColor(Color.BLUE);
+//				g.setColor(Color.BLUE);
+				currentColor = Color.BLUE;
+				System.out.println("Changing to blue");
 			}
 		});
 		
@@ -183,11 +188,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				x2 = position.x;
 				y2 = position.y;
 				Line2D line = new Line2D.Float(x1, y1, x2, y2);
+				g.setColor(currentColor);
 				g.draw(line);
 				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(line);
 				
 				whiteBoardContent.put(line, g.getColor());
+				System.out.println("drawing color: " + g.getColor());
 				
 				isWhiteBoardInUse = false;
 				x1 = x2;
@@ -218,38 +225,42 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			
 			if (mode == Mode.CIRCLE) {
 				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
+				g.setColor(currentColor);
 				g.draw(circle);
 				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(circle);
 				
-				whiteBoardContent.put(circle, g.getColor());
+				whiteBoardContent.put(circle, currentColor);
 				
 				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.OVAL) {
 				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
+				g.setColor(currentColor);
 				g.draw(oval);
 				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(oval);
 				
-				whiteBoardContent.put(oval, g.getColor());
+				whiteBoardContent.put(oval, currentColor);
 				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.RECTANGLE) {
 				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
+				g.setColor(currentColor);
 				g.draw(rectangle);
 				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(rectangle);
 				
-				whiteBoardContent.put(rectangle, g.getColor());
+				whiteBoardContent.put(rectangle, currentColor);
 
 				
 				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.TEXT) {
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
+				g.setColor(Color.BLACK);
 				g.drawString(text, x1, y1);
 			}
 		}
