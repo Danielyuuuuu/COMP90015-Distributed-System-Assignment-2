@@ -136,6 +136,9 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 			this.isUpdatingWhiteBoardContent = true;
 			whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 			this.isUpdatingWhiteBoardContent = false;
+			
+			textList = new ConcurrentHashMap<Coordinates, String>();
+			
 			return true;
 		}
 		return false;

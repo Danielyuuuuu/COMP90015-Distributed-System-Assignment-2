@@ -52,6 +52,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private Client client;
 	private Mode mode = Mode.LINE;
 	private int currentWhiteBoardSize = 0;
+	private int currentWhiteBoardTextSize = 0;
 
 	private Color currentColor = Color.BLACK;
 	
@@ -292,10 +293,11 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	
 	public void drawExistingContent(ConcurrentHashMap<Shape, Color> whiteBoardContent, ConcurrentHashMap<Coordinates, String> textList) {
 		
-		if (this.currentWhiteBoardSize > whiteBoardContent.size()) {
+		if (this.currentWhiteBoardSize > whiteBoardContent.size() || this.currentWhiteBoardTextSize > textList.size()) {
 			g.clearRect(0, 0, 500, 272);
 		}
 		this.currentWhiteBoardSize = whiteBoardContent.size();
+		this.currentWhiteBoardTextSize = textList.size();
 		
 //		for (Shape content: whiteBoardContent) {
 //			g.draw(content);
