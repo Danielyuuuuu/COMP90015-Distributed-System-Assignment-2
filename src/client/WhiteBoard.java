@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 
 
 public class WhiteBoard extends JFrame implements MouseListener, MouseMotionListener{
@@ -95,17 +96,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		btn_clearBoard.setBounds(383, 65, 117, 29);
 		panel.add(btn_clearBoard);
 		
-		JButton btn_black = new JButton("Black");
-		btn_black.setBounds(0, 65, 117, 29);
-		panel.add(btn_black);
-		
-		JButton btn_blue = new JButton("Blue");
-		btn_blue.setBounds(129, 65, 117, 29);
-		panel.add(btn_blue);
-		
 		JButton btn_text = new JButton("Text");
 		btn_text.setBounds(0, 36, 117, 29);
 		panel.add(btn_text);
+		
+		JButton btn_colour = new JButton("Choose Colour");
+		btn_colour.setBounds(0, 65, 117, 29);
+		panel.add(btn_colour);
 		
 		setVisible(true);
 		g = (Graphics2D)canvas.getGraphics();
@@ -156,25 +153,18 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 		});
 		
-		btn_black.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				g.setColor(Color.BLACK);
-				currentColor = Color.BLACK;
-				System.out.println("Changing to Black");
-			}
-		});
-		
-		btn_blue.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				g.setColor(Color.BLUE);
-				currentColor = Color.BLUE;
-				System.out.println("Changing to blue");
-			}
-		});
-		
 		btn_text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mode = Mode.TEXT;
+			}
+		});
+		
+		btn_colour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				  
+		        // color chooser Dialog Box
+				currentColor = JColorChooser.showDialog(panel,
+		                    "Select a colour", currentColor);
 			}
 		});
 	}
@@ -194,7 +184,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 //				whiteBoardContent.add(line);
 				
 				whiteBoardContent.put(line, g.getColor());
-				System.out.println("drawing color: " + g.getColor());
+//				System.out.println("drawing color: " + g.getColor());
 				
 				isWhiteBoardInUse = false;
 				x1 = x2;
