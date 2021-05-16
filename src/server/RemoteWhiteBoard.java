@@ -9,9 +9,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import remote.IRemoteWhiteBoard;
+import remote.Coordinates;
 
 public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhiteBoard{
 
@@ -20,15 +22,18 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private Boolean isManagerDisconnected = false;
 //	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
 //	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
-	ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
 	private Boolean isUpdatingWhiteBoardContent = false;
 	
 	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
 	private List<String> clientsDeclinedList = Collections.synchronizedList(new ArrayList<String>());
 	
+	private ConcurrentHashMap<Coordinates, String> textList = new ConcurrentHashMap<>();
+	
+	
 	protected RemoteWhiteBoard() throws RemoteException {
-
+	
 	}
 
 	@Override
@@ -168,12 +173,20 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		return false;
 		
 	}
+	
+	public void drawText(ConcurrentHashMap<Coordinates, String> textList) throws RemoteException {
+		this.textList.putAll((ConcurrentHashMap<Coordinates, String>) textList);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException {
 		// TODO Auto-generated method stub
 		return whiteBoardContent;
+	}
+	
+	public ConcurrentHashMap<Coordinates, String> getTextList() throws RemoteException {
+		return this.textList;
 	}
 
 	@Override

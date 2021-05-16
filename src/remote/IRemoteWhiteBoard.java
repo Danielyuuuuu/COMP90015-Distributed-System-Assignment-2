@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.awt.Color;
 
 public interface IRemoteWhiteBoard extends Remote{
@@ -22,7 +23,9 @@ public interface IRemoteWhiteBoard extends Remote{
 	public void clientDisconnect(String userName) throws RemoteException;
 	public Boolean resetWhiteBoard() throws RemoteException;
 	public Boolean drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException;
+	public void drawText(ConcurrentHashMap<Coordinates, String> textList) throws RemoteException;
 	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException;
+	public ConcurrentHashMap<Coordinates, String> getTextList() throws RemoteException;
 	public List<String> getClientsWaitList() throws RemoteException;
 	public void addClientToWaitList(String clientName) throws RemoteException;
 	public Boolean isClientInDeclinedList(String clientName) throws RemoteException;

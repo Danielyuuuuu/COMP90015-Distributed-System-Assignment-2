@@ -22,12 +22,17 @@ import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import remote.Coordinates;
+
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
@@ -39,7 +44,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private int x1, y1, x2, y2;
 //	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 //	private Hashtable<Shape, Color> whiteBoardContent = new Hashtable<>();
-	ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
 	
 	private Boolean isWhiteBoardInUse = false;
@@ -49,6 +54,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private int currentWhiteBoardSize = 0;
 
 	private Color currentColor = Color.BLACK;
+	
+	private ConcurrentHashMap<Coordinates, String> textList = new ConcurrentHashMap<>();
 
 	/**
 	 * Create the frame.
@@ -253,6 +260,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
 				g.setColor(Color.BLACK);
 				g.drawString(text, x1, y1);
+				this.textList.put(new Coordinates(x1, y1), text);
 			}
 		}
 		
@@ -276,7 +284,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 	}
 	
-	public void drawExistingContent(ConcurrentHashMap<Shape, Color> whiteBoardContent) {
+	public void drawExistingContent(ConcurrentHashMap<Shape, Color> whiteBoardContent, ConcurrentHashMap<Coordinates, String> textList) {
 		
 		if (this.currentWhiteBoardSize > whiteBoardContent.size()) {
 			g.clearRect(0, 0, 500, 272);
@@ -287,30 +295,49 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 //			g.draw(content);
 //		}
 		
-		Iterator<ConcurrentHashMap.Entry<Shape, Color> > itr = ((ConcurrentHashMap<Shape, Color>) whiteBoardContent).entrySet().iterator();
-		while (itr.hasNext()) {
-            ConcurrentHashMap.Entry<Shape, Color> entry = itr.next();
-            g.setColor(entry.getValue());
-            g.draw(entry.getKey());
-        }
-		
-		
-//		Iterator<Shape> it = this.whiteBoardContent.iterator();
-//		while(it.hasNext()) {
-//			g.draw(it.next());
-//		}
-		
-		Iterator<ConcurrentHashMap.Entry<Shape, Color> > itr2 = ((ConcurrentHashMap<Shape, Color>) this.whiteBoardContent).entrySet().iterator();
+		Iterator<ConcurrentHashMap.Entry<Shape, Color>> itr2 = ((ConcurrentHashMap<Shape, Color>) this.whiteBoardContent).entrySet().iterator();
 		while (itr2.hasNext()) {
             ConcurrentHashMap.Entry<Shape, Color> entry = itr2.next();
             g.setColor(entry.getValue());
             g.draw(entry.getKey());
         }
+		
+//		Iterator<TextAndCoordinates> itr3 = this.textList.iterator();
+//		while (itr3.hasNext()) {
+//			TextAndCoordinates textAndCoordinates = (TextAndCoordinates) itr3.next();
+//			g.setColor(Color.BLACK);
+//			g.drawString(textAndCoordinates.getText(), textAndCoordinates.getX(), textAndCoordinates.getY());
+//        }
+		Iterator<ConcurrentHashMap.Entry<Coordinates, String>> itr3 = ((ConcurrentHashMap<Coordinates, String>) this.textList).entrySet().iterator();
+		while (itr3.hasNext()) {
+			ConcurrentHashMap.Entry<Coordinates, String> entry = itr3.next();
+            g.setColor(Color.BLACK);
+            g.drawString(entry.getValue(), entry.getKey().getX(), entry.getKey().getY());
+        }
+		
+		Iterator<ConcurrentHashMap.Entry<Shape, Color>> itr = ((ConcurrentHashMap<Shape, Color>) whiteBoardContent).entrySet().iterator();
+		while (itr.hasNext()) {
+            ConcurrentHashMap.Entry<Shape, Color> entry = itr.next();
+            g.setColor(entry.getValue());
+            g.draw(entry.getKey());
+        }
+			
+		
+//		Iterator<TextAndCoordinates> itr4 = textList.iterator();
+//		while (itr4.hasNext()) {
+//			TextAndCoordinates textAndCoordinates = (TextAndCoordinates) itr4.next();
+//			g.setColor(Color.BLACK);
+//			g.drawString(textAndCoordinates.getText(), textAndCoordinates.getX(), textAndCoordinates.getY());
+//        }
+		
+		Iterator<ConcurrentHashMap.Entry<Coordinates, String>> itr4 = ((ConcurrentHashMap<Coordinates, String>) textList).entrySet().iterator();
+		while (itr4.hasNext()) {
+			ConcurrentHashMap.Entry<Coordinates, String> entry = itr4.next();
+            g.setColor(Color.BLACK);
+            g.drawString(entry.getValue(), entry.getKey().getX(), entry.getKey().getY());
+        }
 	}
 	
-//	public static void main(String[] args) {
-//		new WhiteBoard().setVisible(true);
-//	}
 	
 	private class WhiteBoardListener implements Runnable{
 
@@ -319,10 +346,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			// TODO Auto-generated method stub
 			try {
 				while(true) {
-						drawExistingContent(client.getRMI().getWhiteBoardContent());
+						drawExistingContent(client.getRMI().getWhiteBoardContent(), client.getRMI().getTextList());
 						while (!client.getRMI().drawWhiteBoard(whiteBoardContent)){
 							Thread.sleep(100);
 						}
+						client.getRMI().drawText(textList);
+						textList = new ConcurrentHashMap<Coordinates, String>();
 						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 						Thread.sleep(400);
 					
