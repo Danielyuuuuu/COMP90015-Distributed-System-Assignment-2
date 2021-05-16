@@ -24,7 +24,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
-	private Boolean isUpdatingWhiteBoardContent = false;
+//	private Boolean isUpdatingWhiteBoardContent = false;
 	
 	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
 	private List<String> clientsDeclinedList = Collections.synchronizedList(new ArrayList<String>());
@@ -132,16 +132,16 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	@Override
 	public Boolean resetWhiteBoard() throws RemoteException {
 		// TODO Auto-generated method stub
-		if (!this.isUpdatingWhiteBoardContent) {
-			this.isUpdatingWhiteBoardContent = true;
-			whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
-			this.isUpdatingWhiteBoardContent = false;
+//		if (!this.isUpdatingWhiteBoardContent) {
+//			this.isUpdatingWhiteBoardContent = true;
+		whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
+//			this.isUpdatingWhiteBoardContent = false;
 			
-			textList = new ConcurrentHashMap<Coordinates, String>();
+		textList = new ConcurrentHashMap<Coordinates, String>();
 			
-			return true;
-		}
-		return false;
+		return true;
+//		}
+//		return false;
 		
 		
 	}
@@ -164,16 +164,16 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //			}
 //		}
 
-		if (!this.isUpdatingWhiteBoardContent) {
-//			synchronized (this.whiteBoardContent) {
-			this.isUpdatingWhiteBoardContent = true;
-			this.whiteBoardContent.putAll(whiteBoardContent);
-			this.isUpdatingWhiteBoardContent = false;
-			return true;
+//		if (!this.isUpdatingWhiteBoardContent) {
+////			synchronized (this.whiteBoardContent) {
+//			this.isUpdatingWhiteBoardContent = true;
+		this.whiteBoardContent.putAll(whiteBoardContent);
+//			this.isUpdatingWhiteBoardContent = false;
+		return true;
 //			}
 
-		}
-		return false;
+//		}
+//		return false;
 		
 	}
 	

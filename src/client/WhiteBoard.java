@@ -47,7 +47,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
 	
-	private Boolean isWhiteBoardInUse = false;
+//	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
 	private Mode mode = Mode.LINE;
@@ -192,13 +192,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Line2D line = new Line2D.Float(x1, y1, x2, y2);
 				g.setColor(currentColor);
 				g.draw(line);
-				isWhiteBoardInUse = true;
+//				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(line);
 				
 				whiteBoardContent.put(line, g.getColor());
 //				System.out.println("drawing color: " + g.getColor());
 				
-				isWhiteBoardInUse = false;
+//				isWhiteBoardInUse = false;
 				x1 = x2;
 				y1 = y2;
 			}
@@ -229,36 +229,36 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
 				g.setColor(currentColor);
 				g.draw(circle);
-				isWhiteBoardInUse = true;
+//				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(circle);
 				
 				whiteBoardContent.put(circle, currentColor);
 				
 				
-				isWhiteBoardInUse = false;
+//				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.OVAL) {
 				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
 				g.setColor(currentColor);
 				g.draw(oval);
-				isWhiteBoardInUse = true;
+//				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(oval);
 				
 				whiteBoardContent.put(oval, currentColor);
 				
-				isWhiteBoardInUse = false;
+//				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.RECTANGLE) {
 				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
 				g.setColor(currentColor);
 				g.draw(rectangle);
-				isWhiteBoardInUse = true;
+//				isWhiteBoardInUse = true;
 //				whiteBoardContent.add(rectangle);
 				
 				whiteBoardContent.put(rectangle, currentColor);
 
 				
-				isWhiteBoardInUse = false;
+//				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.TEXT) {
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
