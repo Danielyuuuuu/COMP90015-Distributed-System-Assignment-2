@@ -41,6 +41,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 //	private Hashtable<Shape, Color> whiteBoardContent = new Hashtable<>();
 	ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
+	
 	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
