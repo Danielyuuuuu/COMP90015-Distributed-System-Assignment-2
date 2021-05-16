@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -103,12 +105,16 @@ public class ClientConnectedGUI {
 			try {
 				while(true) {
 					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
-						lbl_error.setText("You have been kicked");
+						lbl_error.setText("You have been kicked!");
 						lbl_error.setVisible(true);
+						JOptionPane.showMessageDialog(frame, "You have been kicked!");
+						System.exit(0);
 					}
 					else if(client.getRMI().isManagerDisconnected()) {
 						lbl_error.setText("The manager has ended the connection");
 						lbl_error.setVisible(true);
+						JOptionPane.showMessageDialog(frame, "The manager has ended the connection.");
+						System.exit(0);
 					}
 					Thread.sleep(400);
 				}
