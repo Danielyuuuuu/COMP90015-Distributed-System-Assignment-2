@@ -21,8 +21,8 @@ public interface IRemoteWhiteBoard extends Remote{
 	public void managerDisconnect() throws RemoteException;
 	public Boolean isManagerDisconnected() throws RemoteException;
 	public void clientDisconnect(String userName) throws RemoteException;
-	public Boolean resetWhiteBoard() throws RemoteException;
-	public Boolean drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException;
+	public void resetWhiteBoard() throws RemoteException;
+	public void drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException;
 	public void drawText(ConcurrentHashMap<Coordinates, String> textList) throws RemoteException;
 	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException;
 	public ConcurrentHashMap<Coordinates, String> getTextList() throws RemoteException;

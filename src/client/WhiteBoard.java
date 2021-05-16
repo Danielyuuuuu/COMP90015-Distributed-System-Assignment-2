@@ -144,17 +144,11 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		});
 		
 		btn_clearBoard.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {	
 				try {
-					while (!client.getRMI().resetWhiteBoard()) {
-						
-					}
-//					g.setColor(getBackground());
-					
-	                g.clearRect(0, 0, 500, 272);
-	                
+					client.getRMI().resetWhiteBoard();
+					g.clearRect(0, 0, 500, 272);
 					System.out.println("clear board");
-					
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -355,15 +349,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			try {
 				while(true) {
 						drawExistingContent(client.getRMI().getWhiteBoardContent(), client.getRMI().getTextList());
-						while (!client.getRMI().drawWhiteBoard(whiteBoardContent)){
-							Thread.sleep(100);
-						}
+						client.getRMI().drawWhiteBoard(whiteBoardContent);
 						client.getRMI().drawText(textList);
+						
 						textList = new ConcurrentHashMap<Coordinates, String>();
 						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 						Thread.sleep(400);
-					
-					
+
 				}
 			}catch(ConcurrentModificationException e1) {
 //				System.out.println("ConcurrentModificationException");

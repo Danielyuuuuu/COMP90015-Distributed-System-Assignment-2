@@ -130,7 +130,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public Boolean resetWhiteBoard() throws RemoteException {
+	public void resetWhiteBoard() throws RemoteException {
 		// TODO Auto-generated method stub
 //		if (!this.isUpdatingWhiteBoardContent) {
 //			this.isUpdatingWhiteBoardContent = true;
@@ -139,7 +139,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 			
 		textList = new ConcurrentHashMap<Coordinates, String>();
 			
-		return true;
+//		return true;
 //		}
 //		return false;
 		
@@ -147,7 +147,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	}
 
 	@Override
-	public Boolean drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException {
+	public void drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException {
 		// TODO Auto-generated method stub
 //		whiteBoardContent.add(line);
 //		for (Shape content: whiteBoardContent) {
@@ -169,7 +169,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 //			this.isUpdatingWhiteBoardContent = true;
 		this.whiteBoardContent.putAll(whiteBoardContent);
 //			this.isUpdatingWhiteBoardContent = false;
-		return true;
 //			}
 
 //		}
