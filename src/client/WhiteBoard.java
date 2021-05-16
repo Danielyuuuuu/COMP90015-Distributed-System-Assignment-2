@@ -171,8 +171,11 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			public void actionPerformed(ActionEvent e) {
 				  
 		        // color chooser Dialog Box
-				currentColor = JColorChooser.showDialog(panel,
+				Color selectedColor = JColorChooser.showDialog(panel,
 		                    "Select a colour", currentColor);
+				if (selectedColor != null) {
+					currentColor = selectedColor;
+				}
 			}
 		});
 	}
@@ -258,9 +261,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 			else if (mode == Mode.TEXT) {
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
-				g.setColor(Color.BLACK);
-				g.drawString(text, x1, y1);
-				this.textList.put(new Coordinates(x1, y1), text);
+				if (text != null) {
+					g.setColor(Color.BLACK);
+					g.drawString(text, x1, y1);
+					this.textList.put(new Coordinates(x1, y1), text);
+				}
+				
 			}
 		}
 		
