@@ -81,7 +81,20 @@ public class ClientConnectedGUI {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		    	try {
-					client.getRMI().clientDisconnect(client.getUserName());
+		    		int toExit = JOptionPane.showConfirmDialog(
+							frame,
+							String.format(
+								"Are you sure you want to close the application?"),
+							"Warning",
+							JOptionPane.YES_NO_OPTION);
+	    			if (toExit == JOptionPane.YES_OPTION) {
+	    				client.getRMI().clientDisconnect(client.getUserName());
+	    				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    			}
+	    			else {
+	    				frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	    			}
+					
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

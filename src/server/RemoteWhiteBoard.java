@@ -114,6 +114,10 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	public void managerDisconnect() throws RemoteException {
 		// TODO Auto-generated method stub
 		isManagerDisconnected = true;
+		resetWhiteBoard();
+		isWhiteBoardStarted = false;
+		manager = "";
+		clients = Collections.synchronizedList(new ArrayList<String>());
 	}
 
 	@Override
