@@ -159,6 +159,12 @@ public class ClientConnectionGUI {
 							}
 							else {
 								client.getRMI().addClientToWaitList(userName);
+								
+								textField_hostname.setEnabled(false);
+								textField_portnumber.setEnabled(false);
+								textField_username.setEnabled(false);
+								button_connect.setEnabled(false);
+								
 								JOptionPane.showMessageDialog(frame, "Waiting for the manager to let you in.");
 								while (client.getRMI().isClientInWaitList(userName)) {
 									TimeUnit.SECONDS.sleep(1);
@@ -174,6 +180,11 @@ public class ClientConnectionGUI {
 									errorMessage.setVisible(true);
 								}
 							}
+							
+							textField_hostname.setEnabled(true);
+							textField_portnumber.setEnabled(true);
+							textField_username.setEnabled(true);
+							button_connect.setEnabled(true);
 							
 							
 //							client.getRMI().addNewUser(userName);
