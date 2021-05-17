@@ -255,42 +255,42 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			x1 = position.x;
 			y1 = position.y;
 			
-			if (mode == Mode.CIRCLE) {
-//				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
+//			if (mode == Mode.CIRCLE) {
+////				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
+////				g.setColor(currentColor);
+////				g.draw(circle);
+//////				isWhiteBoardInUse = true;
+//////				whiteBoardContent.add(circle);
+////				
+////				whiteBoardContent.put(circle, currentColor);
+////				
+//				
+////				isWhiteBoardInUse = false;
+//			}
+//			else if (mode == Mode.OVAL) {
+//				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
 //				g.setColor(currentColor);
-//				g.draw(circle);
+//				g.draw(oval);
 ////				isWhiteBoardInUse = true;
-////				whiteBoardContent.add(circle);
+////				whiteBoardContent.add(oval);
 //				
-//				whiteBoardContent.put(circle, currentColor);
+//				whiteBoardContent.put(oval, currentColor);
 //				
-				
-//				isWhiteBoardInUse = false;
-			}
-			else if (mode == Mode.OVAL) {
-				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
-				g.setColor(currentColor);
-				g.draw(oval);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(oval);
-				
-				whiteBoardContent.put(oval, currentColor);
-				
-//				isWhiteBoardInUse = false;
-			}
-			else if (mode == Mode.RECTANGLE) {
-				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
-				g.setColor(currentColor);
-				g.draw(rectangle);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(rectangle);
-				
-				whiteBoardContent.put(rectangle, currentColor);
-
-				
-//				isWhiteBoardInUse = false;
-			}
-			else if (mode == Mode.TEXT) {
+////				isWhiteBoardInUse = false;
+//			}
+//			else if (mode == Mode.RECTANGLE) {
+//				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
+//				g.setColor(currentColor);
+//				g.draw(rectangle);
+////				isWhiteBoardInUse = true;
+////				whiteBoardContent.add(rectangle);
+//				
+//				whiteBoardContent.put(rectangle, currentColor);
+//
+//				
+////				isWhiteBoardInUse = false;
+//			}
+			if (mode == Mode.TEXT) {
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
 				if (text != null) {
 					g.setColor(Color.BLACK);
@@ -337,9 +337,46 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				g.setColor(currentColor);
 				g.draw(circle);
 				whiteBoardContent.put(circle, currentColor);
+			}
+			else if (mode == Mode.OVAL) {
+				float dist1 = position.x - x1;
+				float dist2 = position.y - y1;
+				if (dist1 < 0) {
+					dist1 = (float) (0.0 - dist1);
+				}
+				if (dist2 < 0) {
+					dist2 = (float) (0.0 - dist2); 
+				}
+					
+				Ellipse2D oval = new Ellipse2D.Float(x1, y1, dist1, dist2);
+				g.setColor(currentColor);
+				g.draw(oval);
+//				isWhiteBoardInUse = true;
+//				whiteBoardContent.add(oval);
 				
+				whiteBoardContent.put(oval, currentColor);
 				
+//				isWhiteBoardInUse = false;
+			}
+			else if (mode == Mode.RECTANGLE) {
+				float dist1 = position.x - x1;
+				float dist2 = position.y - y1;
+				if (dist1 < 0) {
+					dist1 = (float) (0.0 - dist1);
+				}
+				if (dist2 < 0) {
+					dist2 = (float) (0.0 - dist2); 
+				}
+				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, dist1, dist2);
+				g.setColor(currentColor);
+				g.draw(rectangle);
+//				isWhiteBoardInUse = true;
+//				whiteBoardContent.add(rectangle);
+				
+				whiteBoardContent.put(rectangle, currentColor);
 
+				
+//				isWhiteBoardInUse = false;
 			}
 		}
 	}
