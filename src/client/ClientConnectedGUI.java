@@ -4,7 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -20,6 +23,7 @@ public class ClientConnectedGUI {
 	private JFrame frame;
 	private Client client;
 	private JLabel lbl_error;
+	private JList<String> client_list;
 	/**
 	 * Launch the application.
 	 */	
@@ -77,6 +81,21 @@ public class ClientConnectedGUI {
 		frame.getContentPane().add(lbl_error);
 		lbl_error.setVisible(false);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(16, 162, 193, 187);
+		frame.getContentPane().add(scrollPane);
+		
+		client_list = new JList<String>();
+		client_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		client_list.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
+		scrollPane.setViewportView(client_list);
+		
+		JLabel lbl_userList = new JLabel("User List:");
+		lbl_userList.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_userList.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		lbl_userList.setBounds(16, 136, 97, 25);
+		frame.getContentPane().add(lbl_userList);
+		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -128,6 +147,7 @@ public class ClientConnectedGUI {
 			// TODO Auto-generated method stub
 			try {
 				while(true) {
+					client_list.setListData(client.getRMI().getUserList());
 					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
 						lbl_error.setText("You have been kicked!");
 						lbl_error.setVisible(true);
