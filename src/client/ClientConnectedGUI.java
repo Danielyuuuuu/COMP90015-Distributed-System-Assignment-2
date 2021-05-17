@@ -24,6 +24,7 @@ public class ClientConnectedGUI {
 	private Client client;
 	private JLabel lbl_error;
 	private JList<String> client_list;
+	private Boolean isWhiteBoardOpened = false;
 	/**
 	 * Launch the application.
 	 */	
@@ -108,6 +109,7 @@ public class ClientConnectedGUI {
 							JOptionPane.YES_NO_OPTION);
 	    			if (toExit == JOptionPane.YES_OPTION) {
 	    				client.getRMI().clientDisconnect(client.getUserName());
+	    				isWhiteBoardOpened = false;
 	    				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    			}
 	    			else {
@@ -124,9 +126,13 @@ public class ClientConnectedGUI {
 		btn_joinWhiteBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (client.getRMI().isWhiteBoardStarted()) {
+					if (client.getRMI().isWhiteBoardStarted() && !isWhiteBoardOpened) {
+						isWhiteBoardOpened = true;
 						WhiteBoard whiteBoard = new WhiteBoard(client);
 						whiteBoard.setVisible(true);
+					}
+					else if (isWhiteBoardOpened) {
+						JOptionPane.showMessageDialog(frame, "You have already opened the white board.");
 					}
 					else {
 						JOptionPane.showMessageDialog(frame, "The manager hasn't created a white board.");
@@ -152,12 +158,14 @@ public class ClientConnectedGUI {
 						lbl_error.setText("You have been kicked!");
 						lbl_error.setVisible(true);
 						JOptionPane.showMessageDialog(frame, "You have been kicked!");
+						isWhiteBoardOpened = false;
 						System.exit(0);
 					}
 					else if(client.getRMI().isManagerDisconnected()) {
 						lbl_error.setText("The manager has ended the connection");
 						lbl_error.setVisible(true);
 						JOptionPane.showMessageDialog(frame, "The manager has ended the connection.");
+						isWhiteBoardOpened = false;
 						System.exit(0);
 					}
 					Thread.sleep(400);
