@@ -1,5 +1,6 @@
 package client;
 
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -254,14 +256,14 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			y1 = position.y;
 			
 			if (mode == Mode.CIRCLE) {
-				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
-				g.setColor(currentColor);
-				g.draw(circle);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(circle);
-				
-				whiteBoardContent.put(circle, currentColor);
-				
+//				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
+//				g.setColor(currentColor);
+//				g.draw(circle);
+////				isWhiteBoardInUse = true;
+////				whiteBoardContent.add(circle);
+//				
+//				whiteBoardContent.put(circle, currentColor);
+//				
 				
 //				isWhiteBoardInUse = false;
 			}
@@ -304,7 +306,42 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("mouse released");
+		Point position = canvas.getMousePosition();
+		if (position != null) {
+			System.out.println("position != null");
+//			position.x;
+//			position.y;
+			if (mode == Mode.CIRCLE) {
+				
+				System.out.println("in draw circle");
+				float dist1 = position.x - x1;
+				float dist2 = position.y - y1;
+				if (dist1 < 0) {
+					dist1 = (float) (0.0 - dist1);
+				}
+				if (dist2 < 0) {
+					dist2 = (float) (0.0 - dist2); 
+				}
+				
+				float distToUse;
+				if (dist1 > dist2) {
+					distToUse = dist1;
+				}
+				else {
+					distToUse = dist2;
+				}
+				
+				System.out.println("distance: " + distToUse);
+				Ellipse2D circle = new Ellipse2D.Float(x1, y1, distToUse, distToUse);
+				g.setColor(currentColor);
+				g.draw(circle);
+				whiteBoardContent.put(circle, currentColor);
+				
+				
+
+			}
+		}
 	}
 
 	@Override
