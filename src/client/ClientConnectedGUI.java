@@ -231,7 +231,7 @@ public class ClientConnectedGUI {
 						isWhiteBoardOpened = false;
 						System.exit(0);
 					}
-					Thread.sleep(400);
+					Thread.sleep(200);
 				}
 			} catch(Exception e1) {
 				e1.printStackTrace();

@@ -306,7 +306,7 @@ public class ClientManagerGUI {
 							client.getRMI().declineClient(clientWaitList.get(0));
 						}
 					}
-					Thread.sleep(400);
+					Thread.sleep(200);
 				}
 			} catch(Exception e1) {
 				e1.printStackTrace();
