@@ -36,4 +36,6 @@ public interface IRemoteWhiteBoard extends Remote{
 	public Boolean isWhiteBoardStarted() throws RemoteException;
 	public void startWhiteBoard() throws RemoteException;
 	public void closeWhiteBoard() throws RemoteException;
+	public CopyOnWriteArrayList<TextMessage> getTextMessages() throws RemoteException;
+	public void updateTextMessages(TextMessage text) throws RemoteException;
 }

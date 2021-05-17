@@ -7,14 +7,20 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.SwingConstants;
+
+import remote.TextMessage;
+
 import javax.swing.JButton;
 import java.awt.Color;
 
@@ -25,6 +31,10 @@ public class ClientConnectedGUI {
 	private JLabel lbl_error;
 	private JList<String> client_list;
 	private Boolean isWhiteBoardOpened = false;
+	private JTextField textInputField;
+	private JTextArea textArea;
+	private JScrollPane scrollPane_1;
+	private JLabel lbl_chatWindow;
 	/**
 	 * Launch the application.
 	 */	
@@ -97,6 +107,52 @@ public class ClientConnectedGUI {
 		lbl_userList.setBounds(16, 136, 97, 25);
 		frame.getContentPane().add(lbl_userList);
 		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(230, 128, 253, 174);
+		frame.getContentPane().add(scrollPane_1);
+		
+		textArea = new JTextArea();
+		scrollPane_1.setViewportView(textArea);
+		textArea.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		
+		textInputField = new JTextField();
+		textInputField.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		textInputField.setBounds(221, 314, 203, 35);
+		frame.getContentPane().add(textInputField);
+		textInputField.setColumns(10);
+		
+		JButton btn_sendText = new JButton("Send");
+		btn_sendText.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		btn_sendText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_sendText.setBounds(425, 320, 69, 29);
+		frame.getContentPane().add(btn_sendText);
+		
+		lbl_chatWindow = new JLabel("Chat Window:");
+		lbl_chatWindow.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		lbl_chatWindow.setBounds(230, 100, 137, 25);
+		frame.getContentPane().add(lbl_chatWindow);
+		
+		btn_sendText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String newText = textInputField.getText();
+				String userName = client.getUserName();
+				textInputField.setText("");
+				textArea.append(userName + ": " + newText);
+				
+				try {
+					client.getRMI().updateTextMessages(new TextMessage(userName, newText));
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -153,6 +209,13 @@ public class ClientConnectedGUI {
 			// TODO Auto-generated method stub
 			try {
 				while(true) {
+					CopyOnWriteArrayList<TextMessage> textMessages = client.getRMI().getTextMessages();
+					textArea.setText("");
+					for (TextMessage text: textMessages) {
+						textArea.append(text.getUserName() + ": " + text.getText() + "\n");
+					}
+					client_list.setListData(client.getRMI().getUserList());
+					
 					client_list.setListData(client.getRMI().getUserList());
 					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
 						lbl_error.setText("You have been kicked!");

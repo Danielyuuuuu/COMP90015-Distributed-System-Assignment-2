@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import remote.IRemoteWhiteBoard;
+import remote.TextMessage;
 import remote.Coordinates;
 
 public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhiteBoard{
@@ -32,9 +33,19 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private ConcurrentHashMap<Coordinates, String> textList = new ConcurrentHashMap<>();
 	private Boolean isWhiteBoardStarted = false;
 	
+	private CopyOnWriteArrayList<TextMessage> textMessages = new CopyOnWriteArrayList<>();
+	
 	
 	protected RemoteWhiteBoard() throws RemoteException {
 	
+	}
+	
+	public CopyOnWriteArrayList<TextMessage> getTextMessages() throws RemoteException{
+		return this.textMessages;
+	}
+	
+	public void updateTextMessages(TextMessage text) throws RemoteException{
+		this.textMessages.add(text);
 	}
 
 	@Override
