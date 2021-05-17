@@ -7,8 +7,10 @@ import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -29,12 +31,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import remote.Coordinates;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 
 
 public class WhiteBoard extends JFrame implements MouseListener, MouseMotionListener{
@@ -45,6 +49,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 //	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 //	private Hashtable<Shape, Color> whiteBoardContent = new Hashtable<>();
 	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
+	
 	
 	
 //	private Boolean isWhiteBoardInUse = false;
@@ -73,7 +78,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		this.client = client;
 		panel = new JPanel();
 		setBounds(100, 100, 500, 400);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setContentPane(panel);
 		panel.setLayout(null);
 		
@@ -118,6 +123,23 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		
 		new Thread(new WhiteBoardListener()).start();
+		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	try {
+//					client.getRMI().managerDisconnect();
+		    		if (client.getRMI().isManager(client.getUserName())) {
+		    			client.getRMI().resetWhiteBoard();
+		    			client.getRMI().closeWhiteBoard();
+		    		}
+		    		System.out.println("Closing");
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		});	
 		
 		btn_line.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -354,7 +376,15 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 						
 						textList = new ConcurrentHashMap<Coordinates, String>();
 						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
-						Thread.sleep(400);
+						
+						if (!client.getRMI().isWhiteBoardStarted() && !client.getRMI().isManager(client.getUserName())) {
+//							panel.setVisible(false);
+							JOptionPane.showMessageDialog(panel, "The manager has closed the white board.");
+							Window win = SwingUtilities.getWindowAncestor(panel);
+							win.dispose();
+							return;
+						}
+						Thread.sleep(200);
 
 				}
 			}catch(ConcurrentModificationException e1) {

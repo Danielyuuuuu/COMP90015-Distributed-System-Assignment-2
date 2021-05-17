@@ -33,4 +33,7 @@ public interface IRemoteWhiteBoard extends Remote{
 	public Boolean isClientInWaitList(String clientName) throws RemoteException;
 	public void acceptClient(String clientName) throws RemoteException;
 	public void declineClient(String clientName) throws RemoteException;
+	public Boolean isWhiteBoardStarted() throws RemoteException;
+	public void startWhiteBoard() throws RemoteException;
+	public void closeWhiteBoard() throws RemoteException;
 }

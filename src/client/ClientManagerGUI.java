@@ -163,7 +163,19 @@ public class ClientManagerGUI {
 		
 		btn_newWhiteBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new WhiteBoard(client).setVisible(true);
+				try {
+					if (client.getRMI().isWhiteBoardStarted()) {
+						JOptionPane.showMessageDialog(frame, "You have already created a white board.");
+					}
+					else {
+						client.getRMI().startWhiteBoard();
+						new WhiteBoard(client).setVisible(true);
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		

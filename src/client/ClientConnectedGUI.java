@@ -91,8 +91,19 @@ public class ClientConnectedGUI {
 		
 		btn_joinWhiteBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WhiteBoard whiteBoard = new WhiteBoard(client);
-				whiteBoard.setVisible(true);
+				try {
+					if (client.getRMI().isWhiteBoardStarted()) {
+						WhiteBoard whiteBoard = new WhiteBoard(client);
+						whiteBoard.setVisible(true);
+					}
+					else {
+						JOptionPane.showMessageDialog(frame, "The manager hasn't created a white board.");
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 	}

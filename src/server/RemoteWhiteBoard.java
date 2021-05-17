@@ -30,6 +30,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private List<String> clientsDeclinedList = Collections.synchronizedList(new ArrayList<String>());
 	
 	private ConcurrentHashMap<Coordinates, String> textList = new ConcurrentHashMap<>();
+	private Boolean isWhiteBoardStarted = false;
 	
 	
 	protected RemoteWhiteBoard() throws RemoteException {
@@ -252,6 +253,23 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		// TODO Auto-generated method stub
 		this.clientsDeclinedList.add(clientName);
 		this.clientsWaitList.remove(clientName);
+	}
+
+	@Override
+	public Boolean isWhiteBoardStarted() throws RemoteException {
+		return this.isWhiteBoardStarted;
+	}
+
+	@Override
+	public void startWhiteBoard() throws RemoteException {
+		// TODO Auto-generated method stub
+		this.isWhiteBoardStarted = true;
+	}
+
+	@Override
+	public void closeWhiteBoard() throws RemoteException {
+		// TODO Auto-generated method stub
+		this.isWhiteBoardStarted = false;
 	}
 
 
