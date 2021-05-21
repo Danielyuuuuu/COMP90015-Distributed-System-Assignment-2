@@ -48,13 +48,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	private JPanel panel;
 	private Canvas canvas;
 	private int x1, y1, x2, y2;
-//	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
-//	private Hashtable<Shape, Color> whiteBoardContent = new Hashtable<>();
 	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
 	
-	
-	
-//	private Boolean isWhiteBoardInUse = false;
 	protected Graphics2D g;
 	private Client client;
 	private Mode mode = Mode.LINE;
@@ -69,13 +64,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	 * Create the frame.
 	 */
 	public WhiteBoard(Client client) {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 450, 300);
-//		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-//		contentPane.setLayout(new BorderLayout(0, 0));
-//		setContentPane(contentPane);
-		
 		
 		this.client = client;
 		panel = new JPanel();
@@ -130,7 +118,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		    	try {
-//					client.getRMI().managerDisconnect();
 		    		if (client.getRMI().isManager(client.getUserName())) {
 		    			int toExit = JOptionPane.showConfirmDialog(
 								panel,
@@ -149,7 +136,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    		}
 		    		System.out.println("Closing");
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    }
@@ -186,7 +172,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 					g.clearRect(0, 0, 500, 272);
 					System.out.println("clear board");
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -222,13 +207,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Line2D line = new Line2D.Float(x1, y1, x2, y2);
 				g.setColor(currentColor);
 				g.draw(line);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(line);
-				
+
 				whiteBoardContent.put(line, g.getColor());
-//				System.out.println("drawing color: " + g.getColor());
-				
-//				isWhiteBoardInUse = false;
+
 				x1 = x2;
 				y1 = y2;
 			}
@@ -255,41 +236,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			x1 = position.x;
 			y1 = position.y;
 			
-//			if (mode == Mode.CIRCLE) {
-////				Ellipse2D circle = new Ellipse2D.Float(x1, y1, 20, 20);
-////				g.setColor(currentColor);
-////				g.draw(circle);
-//////				isWhiteBoardInUse = true;
-//////				whiteBoardContent.add(circle);
-////				
-////				whiteBoardContent.put(circle, currentColor);
-////				
-//				
-////				isWhiteBoardInUse = false;
-//			}
-//			else if (mode == Mode.OVAL) {
-//				Ellipse2D oval = new Ellipse2D.Float(x1, y1, 10, 20);
-//				g.setColor(currentColor);
-//				g.draw(oval);
-////				isWhiteBoardInUse = true;
-////				whiteBoardContent.add(oval);
-//				
-//				whiteBoardContent.put(oval, currentColor);
-//				
-////				isWhiteBoardInUse = false;
-//			}
-//			else if (mode == Mode.RECTANGLE) {
-//				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, 20, 20);
-//				g.setColor(currentColor);
-//				g.draw(rectangle);
-////				isWhiteBoardInUse = true;
-////				whiteBoardContent.add(rectangle);
-//				
-//				whiteBoardContent.put(rectangle, currentColor);
-//
-//				
-////				isWhiteBoardInUse = false;
-//			}
 			if (mode == Mode.TEXT) {
 				String text = JOptionPane.showInputDialog(panel, "Input Text");
 				if (text != null) {
@@ -305,16 +251,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("mouse released");
 		Point position = canvas.getMousePosition();
 		if (position != null) {
-			System.out.println("position != null");
-//			position.x;
-//			position.y;
+
 			if (mode == Mode.CIRCLE) {
-				
-				System.out.println("in draw circle");
 				float dist1 = position.x - x1;
 				float dist2 = position.y - y1;
 				if (dist1 < 0) {
@@ -332,7 +272,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 					distToUse = dist2;
 				}
 				
-				System.out.println("distance: " + distToUse);
 				Ellipse2D circle = new Ellipse2D.Float(x1, y1, distToUse, distToUse);
 				g.setColor(currentColor);
 				g.draw(circle);
@@ -351,12 +290,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Ellipse2D oval = new Ellipse2D.Float(x1, y1, dist1, dist2);
 				g.setColor(currentColor);
 				g.draw(oval);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(oval);
 				
 				whiteBoardContent.put(oval, currentColor);
-				
-//				isWhiteBoardInUse = false;
 			}
 			else if (mode == Mode.RECTANGLE) {
 				float dist1 = position.x - x1;
@@ -370,13 +305,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				Rectangle2D rectangle = new Rectangle2D.Float(x1, y1, dist1, dist2);
 				g.setColor(currentColor);
 				g.draw(rectangle);
-//				isWhiteBoardInUse = true;
-//				whiteBoardContent.add(rectangle);
-				
 				whiteBoardContent.put(rectangle, currentColor);
 
-				
-//				isWhiteBoardInUse = false;
 			}
 		}
 	}
@@ -401,23 +331,13 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		this.currentWhiteBoardSize = whiteBoardContent.size();
 		this.currentWhiteBoardTextSize = textList.size();
 		
-//		for (Shape content: whiteBoardContent) {
-//			g.draw(content);
-//		}
-		
 		Iterator<ConcurrentHashMap.Entry<Shape, Color>> itr2 = ((ConcurrentHashMap<Shape, Color>) this.whiteBoardContent).entrySet().iterator();
 		while (itr2.hasNext()) {
             ConcurrentHashMap.Entry<Shape, Color> entry = itr2.next();
             g.setColor(entry.getValue());
             g.draw(entry.getKey());
         }
-		
-//		Iterator<TextAndCoordinates> itr3 = this.textList.iterator();
-//		while (itr3.hasNext()) {
-//			TextAndCoordinates textAndCoordinates = (TextAndCoordinates) itr3.next();
-//			g.setColor(Color.BLACK);
-//			g.drawString(textAndCoordinates.getText(), textAndCoordinates.getX(), textAndCoordinates.getY());
-//        }
+
 		Iterator<ConcurrentHashMap.Entry<Coordinates, String>> itr3 = ((ConcurrentHashMap<Coordinates, String>) this.textList).entrySet().iterator();
 		while (itr3.hasNext()) {
 			ConcurrentHashMap.Entry<Coordinates, String> entry = itr3.next();
@@ -432,14 +352,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
             g.draw(entry.getKey());
         }
 			
-		
-//		Iterator<TextAndCoordinates> itr4 = textList.iterator();
-//		while (itr4.hasNext()) {
-//			TextAndCoordinates textAndCoordinates = (TextAndCoordinates) itr4.next();
-//			g.setColor(Color.BLACK);
-//			g.drawString(textAndCoordinates.getText(), textAndCoordinates.getX(), textAndCoordinates.getY());
-//        }
-		
 		Iterator<ConcurrentHashMap.Entry<Coordinates, String>> itr4 = ((ConcurrentHashMap<Coordinates, String>) textList).entrySet().iterator();
 		while (itr4.hasNext()) {
 			ConcurrentHashMap.Entry<Coordinates, String> entry = itr4.next();
@@ -453,7 +365,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			try {
 				while(true) {
 						drawExistingContent(client.getRMI().getWhiteBoardContent(), client.getRMI().getTextList());
@@ -464,7 +375,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 						
 						if (!client.getRMI().isWhiteBoardStarted() && !client.getRMI().isManager(client.getUserName())) {
-//							panel.setVisible(false);
 							JOptionPane.showMessageDialog(panel, "The manager has closed the white board.");
 							Window win = SwingUtilities.getWindowAncestor(panel);
 							win.dispose();
@@ -474,7 +384,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 
 				}
 			}catch(ConcurrentModificationException e1) {
-//				System.out.println("ConcurrentModificationException");
 				e1.printStackTrace();
 			}
 			catch(Exception e1) {

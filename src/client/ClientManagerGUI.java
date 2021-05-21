@@ -46,37 +46,6 @@ public class ClientManagerGUI {
 	private JTextArea textArea;
 	private JScrollPane scrollPane_1;
 	private JLabel lbl_chatWindow;
-	
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ClientConnectedGUI window = new ClientConnectedGUI();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
-	
-//	public void loadGUI(Client client) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ClientManagerGUI window = new ClientManagerGUI(client);
-//					window.frame.setVisible(true);
-////					this.client = client;
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
@@ -207,7 +176,6 @@ public class ClientManagerGUI {
 	    			}
 					
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    }
@@ -219,7 +187,6 @@ public class ClientManagerGUI {
             	errorMessage.setVisible(false);
             	selectedUser = client_list.getSelectedValue();
             	System.out.println("Selected user: " + selectedUser);
-//            	client_list.setSel
             	if(selectedUser.equals(client.getUserName())) {
             		btn_kick.setEnabled(false);
             	}
@@ -265,7 +232,6 @@ public class ClientManagerGUI {
 						errorMessage.setVisible(true);
 					}
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					popUpMessage.setVisible(false);
 	            	errorMessage.setVisible(true);
@@ -280,7 +246,6 @@ public class ClientManagerGUI {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			try {
 				while(true) {
 					CopyOnWriteArrayList<TextMessage> textMessages = client.getRMI().getTextMessages();
@@ -289,7 +254,6 @@ public class ClientManagerGUI {
 						textArea.append(text.getUserName() + ": " + text.getText() + "\n");
 					}
 					client_list.setListData(client.getRMI().getUserList());
-//					System.out.println(client_list.toString());
 					List<String> clientWaitList = client.getRMI().getClientsWaitList();
 					if (clientWaitList.size() > 0) {
 						int allowToJoin = JOptionPane.showConfirmDialog(

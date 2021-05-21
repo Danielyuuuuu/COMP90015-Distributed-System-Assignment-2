@@ -35,19 +35,4 @@ public class Client {
 	public String getUserName() {
 		return userName;
 	}
-	
-//	public Boolean initializeRMIConnection() {
-//		//Connect to the rmiregistry that is running on localhost
-//		try {
-//			registry = LocateRegistry.getRegistry("localhost", portNumber);
-//			remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
-//			System.out.println("Client: calling remote methods");
-//			remoteWhiteBoard.printHello();
-//			return true;
-//		} catch (RemoteException | NotBoundException e) {
-//			// TODO Auto-generated catch block
-////			e.printStackTrace();
-//			return false;
-//		}
-//	}
 }

@@ -32,7 +32,6 @@ public class ClientConnectionGUI {
 	private JTextField textField_portnumber;
 	private JTextField textField_username;
 	private JLabel errorMessage;
-//	private ClientManagerGUI clientManagerGUI;
 
 	/**
 	 * Launch the application.
@@ -134,17 +133,11 @@ public class ClientConnectionGUI {
 					if (userName.equals("")) {
 						errorMessage.setText("Username can not be empty");
 						errorMessage.setVisible(true);
-//						textField_hostname.setText("");
-//						textField_portnumber.setText("");
 						textField_username.setText("");
 					}else {
 					
 						Registry registry = LocateRegistry.getRegistry(hostName, portNumber);
 						IRemoteWhiteBoard remoteWhiteBoard = (IRemoteWhiteBoard) registry.lookup("whiteBoard");
-						
-						// Check if the user name already exist
-						//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-						
 						
 						Client client = new Client(hostName, portNumber, userName, registry, remoteWhiteBoard);
 						
@@ -186,52 +179,14 @@ public class ClientConnectionGUI {
 							textField_username.setEnabled(true);
 							button_connect.setEnabled(true);
 							
-							
-//							client.getRMI().addNewUser(userName);
-//							
-//							if (client.getRMI().isManager(userName)) {
-//								System.out.println("I am the manager: " + userName);
-//								new ClientManagerGUI(client);
-//								frame.dispose();
-//							}
-//							else {
-//								System.out.println("I am not the manager: " + userName);
-//								new ClientConnectedGUI(client);
-//								frame.dispose();
-//							}
 						}
 						else {
 							errorMessage.setText("Username already taken, please choose another one");
 							errorMessage.setVisible(true);
-	//						textField_hostname.setText("");
-	//						textField_portnumber.setText("");
 							textField_username.setText("");
 	
 						}
 					}
-					
-//					if (!client.getRMI().hasManager()) {
-//						System.out.println("Do not have manager");
-//					}
-//					else {
-//						System.out.println("Already have manager");
-//					}
-					
-//					if (client.initializeRMIConnection()) {
-//						clientManagerGUI = new ClientManagerGUI(client);
-////						clientManagerGUI.loadGUI(client);
-//						frame.dispose();
-//					}
-//					else {
-//						errorMessage.setText("Could not connect, please try again");
-//						errorMessage.setVisible(true);
-//						textField_hostname.setText("");
-//						textField_portnumber.setText("");
-//						textField_username.setText("");
-//					}
-					
-//					clientManagerGUI = new ClientManagerGUI(client);
-//					frame.dispose();
 					
 				}
 				catch(NumberFormatException e1) {

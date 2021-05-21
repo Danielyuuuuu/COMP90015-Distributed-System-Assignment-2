@@ -35,21 +35,6 @@ public class ClientConnectedGUI {
 	private JTextArea textArea;
 	private JScrollPane scrollPane_1;
 	private JLabel lbl_chatWindow;
-	/**
-	 * Launch the application.
-	 */	
-//	public void loadGUI() {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ClientConnectedGUI window = new ClientConnectedGUI();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 	
 	
 	/**

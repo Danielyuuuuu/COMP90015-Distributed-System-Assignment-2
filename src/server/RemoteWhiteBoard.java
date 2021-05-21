@@ -21,11 +21,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private List<String> clients = Collections.synchronizedList(new ArrayList<String>());
 	private String manager = "";
 	private Boolean isManagerDisconnected = false;
-//	private ArrayList<Shape> whiteBoardContent = new ArrayList<>();
-//	private List<Shape> whiteBoardContent = Collections.synchronizedList(new ArrayList<Shape>());
 	private ConcurrentHashMap<Shape, Color> whiteBoardContent = new ConcurrentHashMap<>();
-	
-//	private Boolean isUpdatingWhiteBoardContent = false;
 	
 	private List<String> clientsWaitList = Collections.synchronizedList(new ArrayList<String>());
 	private List<String> clientsDeclinedList = Collections.synchronizedList(new ArrayList<String>());
@@ -62,7 +58,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public Boolean userNameAlreadyExist(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		if (clients == null || clients.size() == 0) {
 			return false;
 		}
@@ -78,7 +73,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public void addNewUser(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		if (!hasManager()) {
 			manager = userName;
 		}
@@ -87,7 +81,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public Boolean isManager(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		if (manager.equals(userName)) {
 			return true;
 		}
@@ -96,13 +89,11 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public String[] getUserList() throws RemoteException {
-		// TODO Auto-generated method stub
 		return clients.toArray(new String[0]);
 	}
 
 	@Override
 	public Boolean haveIBeenKicked(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		for (String client: clients) {
 			if (client.equals(userName)) {
 				return false;
@@ -113,7 +104,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public Boolean kickUser(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		if (clients.contains(userName)){
 			clients.remove(userName);
 			return true;
@@ -123,7 +113,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public void managerDisconnect() throws RemoteException {
-		// TODO Auto-generated method stub
 		isManagerDisconnected = true;
 		resetWhiteBoard();
 		isWhiteBoardStarted = false;
@@ -133,13 +122,11 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public Boolean isManagerDisconnected() throws RemoteException {
-		// TODO Auto-generated method stub
 		return isManagerDisconnected;
 	}
 
 	@Override
 	public void clientDisconnect(String userName) throws RemoteException {
-		// TODO Auto-generated method stub
 		if (clients.contains(userName)){
 			clients.remove(userName);
 		}
@@ -147,49 +134,13 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public void resetWhiteBoard() throws RemoteException {
-		// TODO Auto-generated method stub
-//		if (!this.isUpdatingWhiteBoardContent) {
-//			this.isUpdatingWhiteBoardContent = true;
 		whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
-//			this.isUpdatingWhiteBoardContent = false;
-			
 		textList = new ConcurrentHashMap<Coordinates, String>();
-			
-//		return true;
-//		}
-//		return false;
-		
-		
 	}
 
 	@Override
 	public void drawWhiteBoard(ConcurrentHashMap<Shape, Color> whiteBoardContent) throws RemoteException {
-		// TODO Auto-generated method stub
-//		whiteBoardContent.add(line);
-//		for (Shape content: whiteBoardContent) {
-//			if (!this.whiteBoardContent.contains(content)) {
-//				this.whiteBoardContent.add(content);
-//			}
-//		}
-//		while (this.isUpdatingWhiteBoardContent) {
-//			try {
-//				TimeUnit.SECONDS.sleep(1);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-
-//		if (!this.isUpdatingWhiteBoardContent) {
-////			synchronized (this.whiteBoardContent) {
-//			this.isUpdatingWhiteBoardContent = true;
 		this.whiteBoardContent.putAll(whiteBoardContent);
-//			this.isUpdatingWhiteBoardContent = false;
-//			}
-
-//		}
-//		return false;
-		
 	}
 	
 	public void drawText(ConcurrentHashMap<Coordinates, String> textList) throws RemoteException {
@@ -199,7 +150,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	@SuppressWarnings("unchecked")
 	@Override
 	public ConcurrentHashMap<Shape, Color> getWhiteBoardContent() throws RemoteException {
-		// TODO Auto-generated method stub
 		return whiteBoardContent;
 	}
 	
@@ -209,43 +159,31 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public List<String> getClientsWaitList() throws RemoteException {
-		// TODO Auto-generated method stub
 		return this.clientsWaitList;
 	}
 
 	@Override
 	public void addClientToWaitList(String clientName) throws RemoteException {
-		// TODO Auto-generated method stub
 		this.clientsWaitList.add(clientName);
 	}
 	
 
 	@Override
 	public Boolean isClientInDeclinedList(String clientName) throws RemoteException {
-		// TODO Auto-generated method stub
 		Iterator<String> it = this.clientsDeclinedList.iterator();
 		while(it.hasNext()) {
 			String thisClientName = it.next();
-			System.out.println("isClientInDeclinedList: " + thisClientName + "  " + clientName);
 			if (thisClientName.equals(clientName)) {
 				it.remove();
-				System.out.println("isClientInDeclinedList: returned true");
 				return true;
 			}
 		}
-		System.out.println("isClientInDeclinedList: returned false");
 		return false;
 	}
 
-//	@Override
-//	public void addClientToDeclinedList(String clientName) throws RemoteException {
-//		// TODO Auto-generated method stub
-//		this.clientsDeclinedList.add(clientName);
-//	}
 
 	@Override
 	public Boolean isClientInWaitList(String clientName) throws RemoteException {
-		// TODO Auto-generated method stub
 		Iterator<String> it = this.clientsWaitList.iterator();
 		while(it.hasNext()) {
 			String thisClientName = it.next();
@@ -258,14 +196,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public void acceptClient(String clientName) throws RemoteException {
-		// TODO Auto-generated method stub
 		this.clients.add(clientName);
 		this.clientsWaitList.remove(clientName);
 	}
 
 	@Override
 	public void declineClient(String clientName) throws RemoteException {
-		// TODO Auto-generated method stub
 		this.clientsDeclinedList.add(clientName);
 		this.clientsWaitList.remove(clientName);
 	}
@@ -277,16 +213,12 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 
 	@Override
 	public void startWhiteBoard() throws RemoteException {
-		// TODO Auto-generated method stub
 		this.isWhiteBoardStarted = true;
 	}
 
 	@Override
 	public void closeWhiteBoard() throws RemoteException {
-		// TODO Auto-generated method stub
 		this.isWhiteBoardStarted = false;
 	}
-
-
 
 }

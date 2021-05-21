@@ -9,7 +9,6 @@ import remote.IRemoteWhiteBoard;
 public class Server {
 	
 	private int portNumber;
-//	private String hostName;
 	
 	public Server() {
 		try{
@@ -17,8 +16,6 @@ public class Server {
 			Scanner commandLineInput = new Scanner(System.in);
 			System.out.println("Enter port number: ");
 			portNumber = Integer.parseInt(commandLineInput.nextLine().strip());
-			
-			System.out.println("Port number: " + portNumber);
 			
 			while(portNumber > 65535 || portNumber <= 0) {
 				System.out.println("Please enter a correct port number: ");
@@ -29,12 +26,10 @@ public class Server {
 			
 			// Setup the RMI
 			IRemoteWhiteBoard remoteWhiteBoard = new RemoteWhiteBoard();
-			System.out.println("after creating white board");
 			Registry registry = LocateRegistry.createRegistry(portNumber);
-			System.out.println("after registry");
             registry.bind("whiteBoard", remoteWhiteBoard);
             
-            System.out.println("RMI set");
+            System.out.println("WhiteBoard RMI is running on port " + portNumber);
             
 			
 		}
@@ -42,14 +37,9 @@ public class Server {
 			System.out.println("You did not enter a valid port number, server terminated!");
 			System.exit(1);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println("You did not enter a valid port number, server terminated!");
 			System.out.println(e.toString());
 			System.exit(1);
 		} catch (AlreadyBoundException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
 			System.out.println(e.toString());
 			System.exit(1);
 		}
