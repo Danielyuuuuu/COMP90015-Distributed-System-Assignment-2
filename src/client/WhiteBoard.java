@@ -121,7 +121,8 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		g = (Graphics2D)canvas.getGraphics();
 		
 		
-		new Thread(new WhiteBoardListener()).start();
+		Thread thread = new Thread(new WhiteBoardListener());
+		thread.start();
 		
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
@@ -140,6 +141,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    				client.setWhiteBoardClosed();
 		    				System.out.println("client.setWhiteBoardClosed();");
 		    				System.out.println("client.isWhiteBoardOpened(): " + client.isWhiteBoardOpened());
+		    				thread.stop();
 		    				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		    			}
 		    			else {
@@ -148,6 +150,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    		}
 		    		else {
 		    			client.setWhiteBoardClosed();
+		    			thread.stop();
 		    		}
 				} catch (RemoteException e) {
 					e.printStackTrace();
@@ -400,7 +403,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 						textList = new ConcurrentHashMap<Coordinates, String>();
 						whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 						
-						if (!client.getRMI().isWhiteBoardStarted() && !client.getRMI().isManager(client.getUserName())) {
+						if (!client.getRMI().isWhiteBoardStarted() && !client.getRMI().isManager(client.getUserName()) && client.isWhiteBoardOpened()) {
 							JOptionPane.showMessageDialog(panel, "The manager has closed the white board.");
 							Window win = SwingUtilities.getWindowAncestor(panel);
 							client.setWhiteBoardClosed();

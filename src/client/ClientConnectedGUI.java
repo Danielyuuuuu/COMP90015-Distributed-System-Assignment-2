@@ -35,7 +35,7 @@ public class ClientConnectedGUI {
 	private Client client;
 	private JLabel lbl_error;
 	private JList<String> client_list;
-//	private Boolean isWhiteBoardOpened = false;
+//	private Boolean isThisWhiteBoardOpened = false;
 	private JTextField textInputField;
 	private JTextArea textArea;
 	private JScrollPane scrollPane_1;
