@@ -120,6 +120,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		isWhiteBoardStarted = false;
 		manager = "";
 		clients = Collections.synchronizedList(new ArrayList<String>());
+		textMessages = new CopyOnWriteArrayList<TextMessage>();
 	}
 
 	@Override
