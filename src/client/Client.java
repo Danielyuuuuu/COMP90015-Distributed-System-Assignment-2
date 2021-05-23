@@ -20,6 +20,7 @@ public class Client {
 	private String userName;
 	private Registry registry = null;
 	private IRemoteWhiteBoard remoteWhiteBoard = null;
+	private Boolean isWhiteBoardOpened = false;
 	
 	public Client(String hostName, int portNumber, String userName, Registry registry, IRemoteWhiteBoard remoteWhiteBoard) throws RemoteException {
 		this.hostName = hostName;
@@ -35,5 +36,17 @@ public class Client {
 	
 	public String getUserName() {
 		return userName;
+	}
+	
+	public Boolean isWhiteBoardOpened() {
+		return this.isWhiteBoardOpened;
+	}
+	
+	public void setWhiteBoardOpened() {
+		this.isWhiteBoardOpened = true;
+	}
+	
+	public void setWhiteBoardClosed() {
+		this.isWhiteBoardOpened = false;
 	}
 }

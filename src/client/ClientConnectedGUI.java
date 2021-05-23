@@ -35,7 +35,7 @@ public class ClientConnectedGUI {
 	private Client client;
 	private JLabel lbl_error;
 	private JList<String> client_list;
-	private Boolean isWhiteBoardOpened = false;
+//	private Boolean isWhiteBoardOpened = false;
 	private JTextField textInputField;
 	private JTextArea textArea;
 	private JScrollPane scrollPane_1;
@@ -155,7 +155,8 @@ public class ClientConnectedGUI {
 							JOptionPane.YES_NO_OPTION);
 	    			if (toExit == JOptionPane.YES_OPTION) {
 	    				client.getRMI().clientDisconnect(client.getUserName());
-	    				isWhiteBoardOpened = false;
+//	    				isWhiteBoardOpened = false;
+	    				client.setWhiteBoardClosed();
 	    				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    			}
 	    			else {
@@ -172,12 +173,13 @@ public class ClientConnectedGUI {
 		btn_joinWhiteBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (client.getRMI().isWhiteBoardStarted() && !isWhiteBoardOpened) {
-						isWhiteBoardOpened = true;
+					if (client.getRMI().isWhiteBoardStarted() && !client.isWhiteBoardOpened()) {
+//						isWhiteBoardOpened = true;
+						client.setWhiteBoardOpened();
 						WhiteBoard whiteBoard = new WhiteBoard(client);
 						whiteBoard.setVisible(true);
 					}
-					else if (isWhiteBoardOpened) {
+					else if (client.isWhiteBoardOpened()) {
 						JOptionPane.showMessageDialog(frame, "You have already opened the white board.");
 					}
 					else {
@@ -211,14 +213,16 @@ public class ClientConnectedGUI {
 						lbl_error.setText("The manager has ended the connection");
 						lbl_error.setVisible(true);
 						JOptionPane.showMessageDialog(frame, "The manager has ended the connection.");
-						isWhiteBoardOpened = false;
+//						isWhiteBoardOpened = false;
+						client.setWhiteBoardClosed();
 						System.exit(0);
 					}
 					else if (client.getRMI().haveIBeenKicked(client.getUserName())) {
 						lbl_error.setText("You have been kicked!");
 						lbl_error.setVisible(true);
 						JOptionPane.showMessageDialog(frame, "You have been kicked!");
-						isWhiteBoardOpened = false;
+//						isWhiteBoardOpened = false;
+						client.setWhiteBoardClosed();
 						System.exit(0);
 					}
 					Thread.sleep(200);

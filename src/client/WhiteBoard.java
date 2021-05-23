@@ -137,13 +137,18 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    			if (toExit == JOptionPane.YES_OPTION) {
 		    				client.getRMI().resetWhiteBoard();
 		    				client.getRMI().closeWhiteBoard();
+		    				client.setWhiteBoardClosed();
+		    				System.out.println("client.setWhiteBoardClosed();");
+		    				System.out.println("client.isWhiteBoardOpened(): " + client.isWhiteBoardOpened());
 		    				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		    			}
 		    			else {
 		    				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		    			}
 		    		}
-		    		System.out.println("Closing");
+		    		else {
+		    			client.setWhiteBoardClosed();
+		    		}
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -398,6 +403,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 						if (!client.getRMI().isWhiteBoardStarted() && !client.getRMI().isManager(client.getUserName())) {
 							JOptionPane.showMessageDialog(panel, "The manager has closed the white board.");
 							Window win = SwingUtilities.getWindowAncestor(panel);
+							client.setWhiteBoardClosed();
 							win.dispose();
 							return;
 						}
