@@ -10,5 +10,6 @@ public enum Mode {
 	CIRCLE,
 	OVAL,
 	RECTANGLE,
-	TEXT
+	TEXT,
+	PEN
 }

@@ -85,9 +85,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		canvas.setBackground(Color.WHITE);
 		panel.add(canvas);
 		
-		JButton btn_line = new JButton("Line");
-		btn_line.setBounds(0, 6, 117, 29);
-		panel.add(btn_line);
+		JButton btn_pen = new JButton("Pen");
+		btn_pen.setBounds(129, 36, 117, 29);
+		panel.add(btn_pen);
 		
 		JButton btn_clrcle = new JButton("Circle");
 		btn_clrcle.setBounds(129, 6, 117, 29);
@@ -112,6 +112,10 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		JButton btn_colour = new JButton("Choose Colour");
 		btn_colour.setBounds(0, 65, 117, 29);
 		panel.add(btn_colour);
+		
+		JButton btn_line = new JButton("Line");
+		btn_line.setBounds(0, 6, 117, 29);
+		panel.add(btn_line);
 		
 		setVisible(true);
 		g = (Graphics2D)canvas.getGraphics();
@@ -145,6 +149,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				}
 		    }
 		});	
+		
+		btn_pen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mode = Mode.PEN;
+			}
+		});
 		
 		btn_line.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -206,7 +216,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		Point position = canvas.getMousePosition();
 		
 		if(position!=null) {
-			if (mode == Mode.LINE) {
+			if (mode == Mode.PEN) {
 				x2 = position.x;
 				y2 = position.y;
 				Line2D line = new Line2D.Float(x1, y1, x2, y2);
@@ -312,6 +322,12 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				g.draw(rectangle);
 				whiteBoardContent.put(rectangle, currentColor);
 
+			}
+			else if (mode == Mode.LINE) {
+				Line2D line = new Line2D.Float(x1, y1, position.x, position.y);
+				g.setColor(currentColor);
+				g.draw(line);
+				whiteBoardContent.put(line, g.getColor());
 			}
 		}
 	}
