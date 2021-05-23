@@ -1,3 +1,8 @@
+/*
+ * The program is written by Yifei Yu
+ * Student ID: 945753
+ */
+
 package remote;
 
 import java.io.Serializable;
