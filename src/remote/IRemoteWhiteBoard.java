@@ -10,7 +10,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.awt.Color;
 
 public interface IRemoteWhiteBoard extends Remote{
-	public void printHello() throws RemoteException;
 	public Boolean hasManager() throws RemoteException;
 	public Boolean userNameAlreadyExist(String userName) throws RemoteException;
 	public void addNewUser(String userName) throws RemoteException;

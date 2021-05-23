@@ -146,7 +146,6 @@ public class ClientConnectionGUI {
 							
 							if (!client.getRMI().hasManager()) {
 								client.getRMI().addNewUser(userName);
-								System.out.println("I am the manager: " + userName);
 								new ClientManagerGUI(client);
 								frame.dispose();
 							}
@@ -163,12 +162,10 @@ public class ClientConnectionGUI {
 									TimeUnit.SECONDS.sleep(1);
 								}
 								if (!client.getRMI().isClientInDeclinedList(userName)) {
-									System.out.println("I am not the manager: " + userName);
 									new ClientConnectedGUI(client);
 									frame.dispose();
 								}
 								else {
-									System.out.println("You are not allowed to enter the white board");
 									errorMessage.setText("You are not allowed to enter the white board");
 									errorMessage.setVisible(true);
 								}

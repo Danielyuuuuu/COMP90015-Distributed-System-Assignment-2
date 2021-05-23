@@ -186,7 +186,6 @@ public class ClientManagerGUI {
             	popUpMessage.setVisible(false);
             	errorMessage.setVisible(false);
             	selectedUser = client_list.getSelectedValue();
-            	System.out.println("Selected user: " + selectedUser);
             	if(selectedUser.equals(client.getUserName())) {
             		btn_kick.setEnabled(false);
             	}

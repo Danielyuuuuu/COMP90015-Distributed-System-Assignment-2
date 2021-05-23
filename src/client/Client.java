@@ -22,10 +22,6 @@ public class Client {
 		this.userName = userName;
 		this.registry = registry;
 		this.remoteWhiteBoard = remoteWhiteBoard;
-		
-		System.out.println("Client: calling remote methods");
-		remoteWhiteBoard.printHello();
-
 	}
 	
 	public IRemoteWhiteBoard getRMI() {

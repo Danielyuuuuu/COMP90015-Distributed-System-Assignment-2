@@ -202,17 +202,17 @@ public class ClientConnectedGUI {
 					client_list.setListData(client.getRMI().getUserList());
 					
 					client_list.setListData(client.getRMI().getUserList());
-					if (client.getRMI().haveIBeenKicked(client.getUserName())) {
-						lbl_error.setText("You have been kicked!");
-						lbl_error.setVisible(true);
-						JOptionPane.showMessageDialog(frame, "You have been kicked!");
-						isWhiteBoardOpened = false;
-						System.exit(0);
-					}
-					else if(client.getRMI().isManagerDisconnected()) {
+					if(client.getRMI().isManagerDisconnected()) {
 						lbl_error.setText("The manager has ended the connection");
 						lbl_error.setVisible(true);
 						JOptionPane.showMessageDialog(frame, "The manager has ended the connection.");
+						isWhiteBoardOpened = false;
+						System.exit(0);
+					}
+					else if (client.getRMI().haveIBeenKicked(client.getUserName())) {
+						lbl_error.setText("You have been kicked!");
+						lbl_error.setVisible(true);
+						JOptionPane.showMessageDialog(frame, "You have been kicked!");
 						isWhiteBoardOpened = false;
 						System.exit(0);
 					}

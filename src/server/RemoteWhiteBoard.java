@@ -44,10 +44,6 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 		this.textMessages.add(text);
 	}
 
-	@Override
-	public void printHello() throws RemoteException {
-		System.out.println("Hello from server");
-	}
 	
 	public Boolean hasManager() throws RemoteException {
 		if (clients == null || clients.size() == 0) {
