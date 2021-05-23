@@ -76,6 +76,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	public void addNewUser(String userName) throws RemoteException {
 		if (!hasManager()) {
 			manager = userName;
+			isManagerDisconnected = false;
 		}
 		clients.add(userName);
 	}
