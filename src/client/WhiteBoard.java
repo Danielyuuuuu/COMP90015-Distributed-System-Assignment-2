@@ -144,11 +144,7 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 								"Warning",
 								JOptionPane.YES_NO_OPTION);
 		    			if (toSave == JOptionPane.YES_OPTION) {
-//		    				System.out.println("client.setWhiteBoardClosed();");
-//		    				System.out.println("client.isWhiteBoardOpened(): " + client.isWhiteBoardOpened());
-		    				thread.stop();
-//		    				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		    				
+		    				thread.stop();		
 		    				BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
 		    				Graphics2D g2 = (Graphics2D)image.getGraphics();
 		    				g2.setBackground(Color.WHITE);
@@ -164,7 +160,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		    				client.setWhiteBoardClosed();
 		    			}
 		    			else {
-//		    				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		    				thread.stop();
 		    				client.getRMI().resetWhiteBoard();
 		    				client.getRMI().closeWhiteBoard();
@@ -216,18 +211,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 				try {
 					client.getRMI().resetWhiteBoard();
 					g.clearRect(0, 0, 500, 272);
-					System.out.println("clear board");
-//					byte[] imageByte = client.getRMI().getPreviousDrawingImage();
-//					if (imageByte != null) {
-//						BufferedImage bi;
-//						try {
-//							bi = javax.imageio.ImageIO.read(new ByteArrayInputStream(imageByte));
-//							g.drawImage(bi, 0, 0, null);
-//						} catch (IOException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//					}
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
@@ -254,19 +237,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		thread.start();
 		
-		
-//		try {
-//			g.clearRect(0, 0, 500, 272);
-//			BufferedImage bi;
-//			bi = ImageIO.read(new File("canvas.png"));
-//			g.drawImage(bi, 0, 0, null);
-//			System.out.println("Draw image");
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} 
-		
-
 	}
 	
 	@Override
@@ -405,19 +375,9 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 	public void drawExistingContent(ConcurrentHashMap<Shape, Color> whiteBoardContent, ConcurrentHashMap<Coordinates, String> textList, byte[] imageByte) {
 		
 		if (this.currentWhiteBoardSize > whiteBoardContent.size() || this.currentWhiteBoardTextSize > textList.size()  || (imageByte == null && this.currentImageSize != 0)) {
-			System.out.println("reset whiteboard");
 			g.clearRect(0, 0, 500, 272);
-//			if (imageByte != null) {
-//				BufferedImage bi;
-//				try {
-//					bi = javax.imageio.ImageIO.read(new ByteArrayInputStream(imageByte));
-//					g.drawImage(bi, 0, 0, null);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
 		}
+		
 		this.currentWhiteBoardSize = whiteBoardContent.size();
 		this.currentWhiteBoardTextSize = textList.size();
 		if (imageByte != null) {
@@ -427,8 +387,6 @@ public class WhiteBoard extends JFrame implements MouseListener, MouseMotionList
 			this.currentImageSize = 0;
 		}
 		
-		
-
 		
 		Iterator<ConcurrentHashMap.Entry<Shape, Color>> itr2 = ((ConcurrentHashMap<Shape, Color>) this.whiteBoardContent).entrySet().iterator();
 		while (itr2.hasNext()) {

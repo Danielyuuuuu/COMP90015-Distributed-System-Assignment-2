@@ -235,7 +235,6 @@ public class ClientManagerGUI {
 					            } catch (IOException e1) {
 					                e1.printStackTrace();
 					                System.out.println("Image could not be read");
-					                System.exit(1);
 					            }
 			    			}
 			    			else {
@@ -267,7 +266,6 @@ public class ClientManagerGUI {
 			public void actionPerformed(ActionEvent e) {
 				popUpMessage.setVisible(false);
             	errorMessage.setVisible(false);
-				System.out.println("The selected user: " + selectedUser);
 				
 				try {
 					if (client.getRMI().kickUser(selectedUser)) {
