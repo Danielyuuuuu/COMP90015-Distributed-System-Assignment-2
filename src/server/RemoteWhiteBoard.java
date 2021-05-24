@@ -7,6 +7,10 @@ package server;
 
 import java.awt.Color;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -35,7 +39,8 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	private Boolean isWhiteBoardStarted = false;
 	
 	private CopyOnWriteArrayList<TextMessage> textMessages = new CopyOnWriteArrayList<>();
-	
+	private BufferedImage previousDrawingImage = null;
+	private Boolean toLoadPreviousImage = false;
 	
 	protected RemoteWhiteBoard() throws RemoteException {
 	
@@ -139,6 +144,7 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	public void resetWhiteBoard() throws RemoteException {
 		whiteBoardContent = new ConcurrentHashMap<Shape, Color>();
 		textList = new ConcurrentHashMap<Coordinates, String>();
+		previousDrawingImage = null;
 	}
 
 	@Override
@@ -222,6 +228,45 @@ public class RemoteWhiteBoard extends UnicastRemoteObject implements IRemoteWhit
 	@Override
 	public void closeWhiteBoard() throws RemoteException {
 		this.isWhiteBoardStarted = false;
+	}
+
+	@Override
+	public void uploadPreviousDrawingImage(byte[] imageByte) throws RemoteException {
+		// TODO Auto-generated method stub
+		try {
+			this.previousDrawingImage = javax.imageio.ImageIO.read(new ByteArrayInputStream(imageByte));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public byte[] getPreviousDrawingImage() throws RemoteException {
+		// TODO Auto-generated method stub
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		if (previousDrawingImage != null) {
+			try {
+				javax.imageio.ImageIO.write(previousDrawingImage, "png", baos);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return baos.toByteArray();
+		}
+	    return null;
+	}
+
+	@Override
+	public void setToLoadPreviousImage() throws RemoteException {
+		// TODO Auto-generated method stub
+		toLoadPreviousImage = true;
+	}
+
+	@Override
+	public Boolean toLoadPreviousImage() throws RemoteException {
+		// TODO Auto-generated method stub
+		return toLoadPreviousImage;
 	}
 
 }

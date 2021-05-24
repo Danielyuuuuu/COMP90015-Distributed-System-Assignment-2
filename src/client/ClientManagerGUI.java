@@ -15,6 +15,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,6 +27,7 @@ import javax.swing.SwingConstants;
 
 import remote.TextMessage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -208,8 +213,46 @@ public class ClientManagerGUI {
 						JOptionPane.showMessageDialog(frame, "You have already created a white board.");
 					}
 					else {
-						client.getRMI().startWhiteBoard();
-						new WhiteBoard(client).setVisible(true);
+						File imagFile = new File("canvas.png");
+						boolean exists = imagFile.exists();
+						if (exists) {
+							int toOpenPreviousDrawing = JOptionPane.showConfirmDialog(
+								frame,
+								String.format(
+									"Do you want to load the saved whiteboard?"),
+								"Option",
+								JOptionPane.YES_NO_OPTION);
+							if (toOpenPreviousDrawing == JOptionPane.YES_OPTION) {
+								client.getRMI().startWhiteBoard();
+								WhiteBoard whiteboard = new WhiteBoard(client);
+								client.getRMI().setToLoadPreviousImage();
+								whiteboard.setVisible(true);	
+								try {
+									BufferedImage bi = ImageIO.read(new File("canvas.png")); 
+									ByteArrayOutputStream baos = new ByteArrayOutputStream();
+								    javax.imageio.ImageIO.write(bi, "png", baos);
+									client.getRMI().uploadPreviousDrawingImage(baos.toByteArray());
+					            } catch (IOException e1) {
+					                e1.printStackTrace();
+					                System.out.println("Image could not be read");
+					                System.exit(1);
+					            }
+			    			}
+			    			else {
+			    				client.getRMI().startWhiteBoard();
+								WhiteBoard whiteboard = new WhiteBoard(client);
+								whiteboard.setVisible(true);
+			    			}
+						}
+						else {
+							client.getRMI().startWhiteBoard();
+							WhiteBoard whiteboard = new WhiteBoard(client);
+							whiteboard.setVisible(true);
+						}
+						
+						
+
+						
 					}
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block

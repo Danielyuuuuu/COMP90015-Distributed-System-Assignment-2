@@ -6,6 +6,7 @@
 package remote;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -41,4 +42,9 @@ public interface IRemoteWhiteBoard extends Remote{
 	public void closeWhiteBoard() throws RemoteException;
 	public CopyOnWriteArrayList<TextMessage> getTextMessages() throws RemoteException;
 	public void updateTextMessages(TextMessage text) throws RemoteException;
+	public void uploadPreviousDrawingImage(byte[] imageByte) throws RemoteException;
+	public byte[] getPreviousDrawingImage() throws RemoteException;
+	public void setToLoadPreviousImage() throws RemoteException;
+	public Boolean toLoadPreviousImage() throws RemoteException;
+	
 }
